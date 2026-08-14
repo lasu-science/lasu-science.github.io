@@ -8,6 +8,25 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      processEnvironments: true,
+      tags: 'ams'
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+      ignoreHtmlClass: 'no-mathjax'
+    },
+    chtml: {
+      displayAlign: 'left'
+    }
+  };
+</script>
+<script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.js"></script>
 <style>
   :root{
     --ink:#10181D;
@@ -281,6 +300,16 @@
   .modal-body blockquote{ margin:0 0 14px; padding-left:14px; border-left:2px solid var(--accent); color:var(--text-muted); }
   .modal-loading, .modal-error{ font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--text-muted); }
 
+  /* ---------- MathJax: heredar paleta y evitar desbordes ---------- */
+  mjx-container{ color:inherit; }
+  .card mjx-container, .card p mjx-container{ font-size:0.95em; }
+  mjx-container[display="true"]{
+    overflow-x:auto; overflow-y:hidden;
+    max-width:100%;
+    padding:2px 0;
+  }
+  .modal-body mjx-container[display="true"]{ margin:14px 0 !important; }
+
   footer{
     max-width:1200px; margin:0 auto;
     padding:30px 48px 44px;
@@ -447,6 +476,35 @@
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* --- MathJax: tipografiado seguro (funciona aunque el script async no haya cargado aún) --- */
+  function typesetMath(el){
+    if (!window.MathJax) return;
+    const run = () => {
+      if (window.MathJax.typesetClear) MathJax.typesetClear([el]);
+      MathJax.typesetPromise([el]).catch(err => console.error('MathJax typeset error:', err));
+    };
+    if (window.MathJax.startup && window.MathJax.startup.promise){
+      MathJax.startup.promise.then(run);
+    } else if (window.MathJax.typesetPromise){
+      run();
+    }
+  }
+
+  /* --- Protege bloques de fórmulas ($$..$$, \[..\], \(..\), $..$) para que marked.js no los altere --- */
+  function protectMath(raw){
+    const store = [];
+    const stash = (match) => { store.push(match); return `@@MATHJAXBLOCK${store.length - 1}@@`; };
+    const protectedText = raw
+      .replace(/\$\$[\s\S]+?\$\$/g, stash)
+      .replace(/\\\[[\s\S]+?\\\]/g, stash)
+      .replace(/\\\([\s\S]+?\\\)/g, stash)
+      .replace(/(?<!\$)\$(?!\$)(?:\\\$|[^\n$])+?\$(?!\$)/g, stash);
+    return { protectedText, store };
+  }
+  function restoreMath(html, store){
+    return html.replace(/@@MATHJAXBLOCK(\d+)@@/g, (_, i) => store[Number(i)]);
+  }
+
   const grid = document.getElementById('grid');
   const tagsRow = document.getElementById('tagsRow');
   const searchInput = document.getElementById('searchInput');
@@ -525,6 +583,7 @@
     }
 
     resultCount.textContent = `mostrando ${filtered.length} de ${ENTRADAS_ORDENADAS.length}`;
+    typesetMath(grid);
   }
 
   searchInput.addEventListener('input', (e) => {
@@ -578,7 +637,13 @@
       const res = await fetch(file);
       if (!res.ok) throw new Error('archivo no encontrado');
       const raw = await res.text();
-      modalBody.innerHTML = window.marked ? marked.parse(raw) : `<pre>${raw}</pre>`;
+      if (window.marked){
+        const { protectedText, store } = protectMath(raw);
+        modalBody.innerHTML = restoreMath(marked.parse(protectedText), store);
+      } else {
+        modalBody.innerHTML = `<pre>${raw}</pre>`;
+      }
+      typesetMath(modalBody);
     } catch(err){
       modalBody.innerHTML = `<p class="modal-error">No se pudo cargar el informe (“${file}”). Si estás abriendo este HTML directamente desde tu computadora, el navegador puede bloquear esa carga — probá sirviendo la carpeta con un servidor local o subiéndola a un hosting.</p>`;
     }
