@@ -707,6 +707,402 @@ Estas métricas deben permitir comparar tecnologías aparentemente diferentes ba
 
 ---
 
+## Calculadora interactiva de métricas de diseño
+
+<style>
+  #sw-widget * { box-sizing: border-box; }
+  #sw-widget { font-family: 'IBM Plex Sans', sans-serif; color: var(--text-dark-soft); }
+  #sw-widget p.sw-sub { color: var(--text-muted); font-size: 13px; line-height: 1.6; margin: 0 0 1.25rem; }
+  #sw-widget .sw-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-bottom: 1rem; }
+  #sw-widget .sw-panel { background: var(--paper-dim); border: 1px solid var(--ink-line); border-radius: var(--radius); padding: 1rem 1.1rem; }
+  #sw-widget .sw-panel h3 { font-family: 'Space Grotesk', sans-serif; font-size: 14.5px; font-weight: 600; margin: 0 0 0.6rem; color: var(--text-light); }
+  #sw-widget .sw-eq { margin: 0 0 0.9rem; overflow-x: auto; font-size: 14px; }
+  #sw-widget .sw-eq mjx-container { color: var(--text-light) !important; }
+  #sw-widget .sw-field { margin-bottom: 0.7rem; }
+  #sw-widget .sw-field label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.02em; color: var(--text-muted); display: flex; justify-content: space-between; margin-bottom: 4px; }
+  #sw-widget .sw-field label span.sw-v { color: var(--text-light); }
+  #sw-widget select { width: 100%; padding: 5px 7px; border-radius: var(--radius); border: 1px solid var(--ink-line); background: var(--ink-soft); color: var(--text-light); font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; }
+  #sw-widget input[type=range] { width: 100%; -webkit-appearance: none; appearance: none; height: 3px; border-radius: 2px; background: var(--ink-line); outline: none; margin: 2px 0; }
+  #sw-widget input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 13px; height: 13px; border-radius: 50%; background: var(--accent); cursor: pointer; box-shadow: 0 0 0 4px var(--accent-soft); }
+  #sw-widget input[type=range]::-moz-range-thumb { width: 13px; height: 13px; border: none; border-radius: 50%; background: var(--accent); cursor: pointer; box-shadow: 0 0 0 4px var(--accent-soft); }
+  #sw-widget .sw-out { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent); margin: 0.5rem 0 0.7rem; line-height: 1.5; }
+  #sw-widget .sw-out b { color: var(--text-light); font-weight: 500; }
+  #sw-widget .sw-chart { position: relative; width: 100%; height: 150px; }
+</style>
+
+<div id="sw-widget">
+<p class="sw-sub">Las cuatro métricas de la Sección 24, con sliders para explorar cómo responde cada una. Los valores por defecto son órdenes de magnitud típicos, no un diseño específico.</p>
+
+<div class="sw-grid">
+
+  <div class="sw-panel">
+    <h3>Globo estratosférico</h3>
+    <div class="sw-eq">$$m_{útil} = (\rho_{aire}-\rho_{gas})V - m_{seco}$$</div>
+    <div class="sw-field">
+      <label>Gas de sustentación</label>
+      <select id="sw-gas">
+        <option value="0.0899">Hidrógeno (ρ₀ = 0.0899 kg/m³)</option>
+        <option value="0.1786">Helio (ρ₀ = 0.1786 kg/m³)</option>
+      </select>
+    </div>
+    <div class="sw-field">
+      <label>ρ<sub>aire</sub> (densidad ambiente) <span class="sw-v" id="sw-rho-out">0.50 kg/m³</span></label>
+      <input type="range" id="sw-rho" min="0.05" max="1.225" step="0.01" value="0.5">
+    </div>
+    <div class="sw-field">
+      <label>Volumen V <span class="sw-v" id="sw-V-out">500 m³</span></label>
+      <input type="range" id="sw-V" min="10" max="2000" step="10" value="500">
+    </div>
+    <div class="sw-field">
+      <label>Masa seca <span class="sw-v" id="sw-mseco-out">30 kg</span></label>
+      <input type="range" id="sw-mseco" min="1" max="200" step="1" value="30">
+    </div>
+    <div class="sw-out" id="sw-globo-out">-</div>
+    <div class="sw-chart"><canvas id="sw-chart-globo"></canvas></div>
+  </div>
+
+  <div class="sw-panel">
+    <h3>Vela solar</h3>
+    <div class="sw-eq">$$a = \dfrac{2IA}{mc} \qquad I = \dfrac{I_\odot}{d^2}$$</div>
+    <div class="sw-field">
+      <label>Distancia al Sol (d) <span class="sw-v" id="sw-d-out">1.00 UA</span></label>
+      <input type="range" id="sw-d" min="0.3" max="2" step="0.01" value="1">
+    </div>
+    <div class="sw-field">
+      <label>A/m (área/masa) <span class="sw-v" id="sw-am-out">10.0 m²/kg</span></label>
+      <input type="range" id="sw-am" min="1" max="50" step="0.5" value="10">
+    </div>
+    <div class="sw-out" id="sw-vela-out">-</div>
+    <div class="sw-chart"><canvas id="sw-chart-vela"></canvas></div>
+  </div>
+
+  <div class="sw-panel">
+    <h3>Radiador térmico</h3>
+    <div class="sw-eq">$$A_{rad} = \dfrac{P}{\epsilon\sigma T^4}$$</div>
+    <div class="sw-field">
+      <label>Potencia a disipar (P) <span class="sw-v" id="sw-P-out">100 kW</span></label>
+      <input type="range" id="sw-P" min="1" max="5000" step="1" value="100">
+    </div>
+    <div class="sw-field">
+      <label>Temperatura de operación (T) <span class="sw-v" id="sw-T-out">300 K</span></label>
+      <input type="range" id="sw-T" min="200" max="600" step="1" value="300">
+    </div>
+    <div class="sw-field">
+      <label>Emisividad (ε) <span class="sw-v" id="sw-eps-out">0.90</span></label>
+      <input type="range" id="sw-eps" min="0.1" max="0.98" step="0.01" value="0.9">
+    </div>
+    <div class="sw-out" id="sw-rad-out">-</div>
+    <div class="sw-chart"><canvas id="sw-chart-rad"></canvas></div>
+  </div>
+
+  <div class="sw-panel">
+    <h3>Cohete (Tsiolkovski)</h3>
+    <div class="sw-eq">$$\Delta v = v_e\ln\!\left(\dfrac{m_0}{m_f}\right), \quad v_e = I_{sp}\,g_0$$</div>
+    <div class="sw-field">
+      <label>Impulso específico (Isp) <span class="sw-v" id="sw-isp-out">320 s</span></label>
+      <input type="range" id="sw-isp" min="200" max="450" step="1" value="320">
+    </div>
+    <div class="sw-field">
+      <label>Δv deseado <span class="sw-v" id="sw-dv-out">8.0 km/s</span></label>
+      <input type="range" id="sw-dv" min="3" max="12" step="0.1" value="8">
+    </div>
+    <div class="sw-out" id="sw-cohete-out">-</div>
+    <div class="sw-chart"><canvas id="sw-chart-cohete"></canvas></div>
+  </div>
+
+  <div class="sw-panel">
+    <h3>Propulsión láser</h3>
+    <div class="sw-eq">$$F = (1+R)\dfrac{P_{obj}}{c} \qquad P_{el} = \dfrac{P_{obj}}{\eta_{láser}\cdot f_{cap}(d)}$$</div>
+    <p class="sw-sub" style="margin-bottom:0.6rem;">Supone un emisor de apertura fija D=10 m a λ=1.064 µm (Nd:YAG) y un objetivo con área reflectante fija de 100 m²; ambos son constantes de referencia, no sliders. f<sub>cap</sub>(d) es la fracción de la mancha del haz (limitada por difracción) que efectivamente cae sobre el objetivo.</p>
+    <div class="sw-field">
+      <label>Empuje deseado (F) <span class="sw-v" id="sw-laserF-out">0.10 N</span></label>
+      <input type="range" id="sw-laserF" min="0.001" max="2" step="0.001" value="0.1">
+    </div>
+    <div class="sw-field">
+      <label>Eficiencia del láser (η) <span class="sw-v" id="sw-laserEta-out">0.40</span></label>
+      <input type="range" id="sw-laserEta" min="0.1" max="0.7" step="0.01" value="0.4">
+    </div>
+    <div class="sw-field">
+      <label>Reflectividad del receptor (R) <span class="sw-v" id="sw-laserR-out">0.90</span></label>
+      <input type="range" id="sw-laserR" min="0" max="1" step="0.01" value="0.9">
+    </div>
+    <div class="sw-field">
+      <label>Distancia (d) <span class="sw-v" id="sw-laserD-out">50 000 km</span></label>
+      <input type="range" id="sw-laserDexp" min="2" max="6" step="0.02" value="4.7">
+    </div>
+    <div class="sw-out" id="sw-laser-out">-</div>
+    <div class="sw-chart"><canvas id="sw-chart-laser"></canvas></div>
+  </div>
+
+</div>
+</div>
+
+<script>
+(function(){
+function withChart(run){
+  if (window.Chart) { run(); return; }
+  var existing = document.getElementById('sw-chartjs-lib');
+  if (existing) { existing.addEventListener('load', run); return; }
+  var s = document.createElement('script');
+  s.id = 'sw-chartjs-lib';
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js';
+  s.onload = run;
+  document.head.appendChild(s);
+}
+withChart(function(){
+
+function cssVar(name, fallback) {
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  return v || fallback;
+}
+const COL_ACCENT = cssVar('--accent', '#6FAFD9');
+const COL_MUTED = cssVar('--text-muted', '#7C8D95');
+const COL_WARN = '#E3A857';
+const COL_GRID = cssVar('--ink-line', 'rgba(214,226,232,0.10)');
+
+Chart.defaults.color = COL_MUTED;
+Chart.defaults.borderColor = COL_GRID;
+Chart.defaults.font.family = "'IBM Plex Mono', monospace";
+Chart.defaults.font.size = 10;
+
+const C_LIGHT = 2.998e8;
+const SIGMA = 5.670e-8;
+const G0 = 9.80665;
+const I_SUN = 1361;
+
+function baseOpts(xTitle, yTitle, logY) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    animation: false,
+    scales: {
+      x: { type: 'linear', title: { display: true, text: xTitle, font:{size:10} }, grid:{color:COL_GRID} },
+      y: { type: logY ? 'logarithmic' : 'linear', title: { display: true, text: yTitle, font:{size:10} }, grid:{color:COL_GRID} }
+    },
+    plugins: { legend: { display: false } }
+  };
+}
+
+function markerDataset(x, yMin, yMax) {
+  return { data: [{x:x, y:yMin},{x:x, y:yMax}], borderColor: COL_WARN, borderDash:[4,4], borderWidth:1.5, pointRadius:0 };
+}
+
+// ---------- Globo ----------
+const gasEl = document.getElementById('sw-gas'), rhoEl = document.getElementById('sw-rho'),
+      VEl = document.getElementById('sw-V'), msEl = document.getElementById('sw-mseco');
+let chartGlobo;
+function updateGlobo() {
+  const rho0Gas = parseFloat(gasEl.value);
+  const rhoAire = parseFloat(rhoEl.value);
+  const V = parseFloat(VEl.value);
+  const mSeco = parseFloat(msEl.value);
+  const rhoGas = rho0Gas * (rhoAire/1.225);
+  const mUtil = (rhoAire - rhoGas) * V - mSeco;
+
+  document.getElementById('sw-rho-out').textContent = rhoAire.toFixed(2) + ' kg/m³';
+  document.getElementById('sw-V-out').textContent = V.toFixed(0) + ' m³';
+  document.getElementById('sw-mseco-out').textContent = mSeco.toFixed(0) + ' kg';
+  document.getElementById('sw-globo-out').innerHTML =
+    'ρ<sub>gas</sub> ≈ <b>' + rhoGas.toFixed(4) + ' kg/m³</b> &nbsp;→&nbsp; m<sub>útil</sub> ≈ <b>' + mUtil.toFixed(1) + ' kg</b>' +
+    (mUtil < 0 ? ' <span style="color:#E3A857">(no flota)</span>' : '');
+
+  const pts = [];
+  for (let v = 10; v <= 2000; v += 20) pts.push({x:v, y: (rhoAire-rhoGas)*v - mSeco});
+  if (!chartGlobo) {
+    chartGlobo = new Chart(document.getElementById('sw-chart-globo'), {
+      type: 'line',
+      data: { datasets: [
+        { data: pts, borderColor: COL_ACCENT, borderWidth:2, pointRadius:0 },
+        markerDataset(V, Math.min(...pts.map(p=>p.y)), Math.max(...pts.map(p=>p.y)))
+      ]},
+      options: baseOpts('V (m³)', 'm_útil (kg)', false)
+    });
+  } else {
+    chartGlobo.data.datasets[0].data = pts;
+    chartGlobo.data.datasets[1] = markerDataset(V, Math.min(...pts.map(p=>p.y)), Math.max(...pts.map(p=>p.y)));
+    chartGlobo.update('none');
+  }
+}
+[gasEl, rhoEl, VEl, msEl].forEach(el => el.addEventListener('input', updateGlobo));
+updateGlobo();
+
+// ---------- Vela solar ----------
+const dEl = document.getElementById('sw-d'), amEl = document.getElementById('sw-am');
+let chartVela;
+function updateVela() {
+  const d = parseFloat(dEl.value);
+  const am = parseFloat(amEl.value);
+  const I = I_SUN / (d*d);
+  const a = (2*I*am) / C_LIGHT;
+  const dvDia = a * 86400;
+
+  document.getElementById('sw-d-out').textContent = d.toFixed(2) + ' UA';
+  document.getElementById('sw-am-out').textContent = am.toFixed(1) + ' m²/kg';
+  document.getElementById('sw-vela-out').innerHTML =
+    'I ≈ <b>' + I.toFixed(0) + ' W/m²</b> &nbsp;→&nbsp; a ≈ <b>' + (a*1e6).toFixed(2) + ' µm/s²</b><br>≈ <b>' + dvDia.toFixed(2) + ' m/s</b> de Δv acumulado por día';
+
+  const pts = [];
+  for (let x = 1; x <= 50; x += 1) pts.push({x:x, y: (2*I*x)/C_LIGHT * 1e6});
+  const yVals = pts.map(p=>p.y);
+  if (!chartVela) {
+    chartVela = new Chart(document.getElementById('sw-chart-vela'), {
+      type: 'line',
+      data: { datasets: [
+        { data: pts, borderColor: COL_ACCENT, borderWidth:2, pointRadius:0 },
+        markerDataset(am, Math.min(...yVals), Math.max(...yVals))
+      ]},
+      options: baseOpts('A/m (m²/kg)', 'a (µm/s²)', false)
+    });
+  } else {
+    chartVela.data.datasets[0].data = pts;
+    chartVela.data.datasets[1] = markerDataset(am, Math.min(...yVals), Math.max(...yVals));
+    chartVela.update('none');
+  }
+}
+[dEl, amEl].forEach(el => el.addEventListener('input', updateVela));
+updateVela();
+
+// ---------- Radiador ----------
+const PEl = document.getElementById('sw-P'), TEl = document.getElementById('sw-T'), epsEl = document.getElementById('sw-eps');
+let chartRad;
+function updateRad() {
+  const P = parseFloat(PEl.value) * 1000;
+  const T = parseFloat(TEl.value);
+  const eps = parseFloat(epsEl.value);
+  const A = P / (eps * SIGMA * Math.pow(T,4));
+
+  document.getElementById('sw-P-out').textContent = (P/1000).toFixed(0) + ' kW';
+  document.getElementById('sw-T-out').textContent = T.toFixed(0) + ' K';
+  document.getElementById('sw-eps-out').textContent = eps.toFixed(2);
+  document.getElementById('sw-rad-out').innerHTML = 'A<sub>rad</sub> ≈ <b>' + A.toFixed(1) + ' m²</b>';
+
+  const pts = [];
+  for (let t = 200; t <= 600; t += 10) pts.push({x:t, y: P/(eps*SIGMA*Math.pow(t,4))});
+  const yVals = pts.map(p=>p.y);
+  if (!chartRad) {
+    chartRad = new Chart(document.getElementById('sw-chart-rad'), {
+      type: 'line',
+      data: { datasets: [
+        { data: pts, borderColor: COL_ACCENT, borderWidth:2, pointRadius:0 },
+        markerDataset(T, Math.min(...yVals), Math.max(...yVals))
+      ]},
+      options: baseOpts('T (K)', 'A_rad (m²)', true)
+    });
+  } else {
+    chartRad.data.datasets[0].data = pts;
+    chartRad.data.datasets[1] = markerDataset(T, Math.min(...yVals), Math.max(...yVals));
+    chartRad.update('none');
+  }
+}
+[PEl, TEl, epsEl].forEach(el => el.addEventListener('input', updateRad));
+updateRad();
+
+// ---------- Cohete ----------
+const ispEl = document.getElementById('sw-isp'), dvEl = document.getElementById('sw-dv');
+let chartCohete;
+function updateCohete() {
+  const isp = parseFloat(ispEl.value);
+  const dv = parseFloat(dvEl.value) * 1000;
+  const ve = isp * G0;
+  const ratio = Math.exp(dv/ve);
+
+  document.getElementById('sw-isp-out').textContent = isp.toFixed(0) + ' s';
+  document.getElementById('sw-dv-out').textContent = (dv/1000).toFixed(1) + ' km/s';
+  document.getElementById('sw-cohete-out').innerHTML = 'v<sub>e</sub> ≈ <b>' + ve.toFixed(0) + ' m/s</b> &nbsp;→&nbsp; m₀/m<sub>f</sub> ≈ <b>' + ratio.toFixed(2) + '</b>';
+
+  const pts = [];
+  for (let x = 3; x <= 12; x += 0.2) pts.push({x:x, y: Math.exp((x*1000)/ve)});
+  const yVals = pts.map(p=>p.y);
+  if (!chartCohete) {
+    chartCohete = new Chart(document.getElementById('sw-chart-cohete'), {
+      type: 'line',
+      data: { datasets: [
+        { data: pts, borderColor: COL_ACCENT, borderWidth:2, pointRadius:0 },
+        markerDataset(dv/1000, Math.min(...yVals), Math.max(...yVals))
+      ]},
+      options: baseOpts('Δv (km/s)', 'm₀/m_f', true)
+    });
+  } else {
+    chartCohete.data.datasets[0].data = pts;
+    chartCohete.data.datasets[1] = markerDataset(dv/1000, Math.min(...yVals), Math.max(...yVals));
+    chartCohete.update('none');
+  }
+}
+[ispEl, dvEl].forEach(el => el.addEventListener('input', updateCohete));
+updateCohete();
+
+// ---------- Propulsión láser ----------
+const LAMBDA = 1.064e-6;   // m, Nd:YAG
+const D_EMISOR = 10;       // m, apertura del emisor (constante de referencia)
+const A_TARGET = 100;      // m², área reflectante del objetivo (constante de referencia)
+
+function fmtPower(w) {
+  if (w >= 1e9) return (w/1e9).toFixed(2) + ' GW';
+  if (w >= 1e6) return (w/1e6).toFixed(2) + ' MW';
+  if (w >= 1e3) return (w/1e3).toFixed(2) + ' kW';
+  return w.toFixed(1) + ' W';
+}
+
+const laserFEl = document.getElementById('sw-laserF'), laserEtaEl = document.getElementById('sw-laserEta'),
+      laserREl = document.getElementById('sw-laserR'), laserDexpEl = document.getElementById('sw-laserDexp');
+let chartLaser;
+function laserCap(d_km) {
+  const d = d_km * 1000;
+  const spotDiam = 2.44 * LAMBDA * d / D_EMISOR;
+  const spotArea = Math.PI * Math.pow(spotDiam/2, 2);
+  return { spotDiam, fCap: Math.min(1, A_TARGET/spotArea) };
+}
+function updateLaser() {
+  const F = parseFloat(laserFEl.value);
+  const eta = parseFloat(laserEtaEl.value);
+  const R = parseFloat(laserREl.value);
+  const dExp = parseFloat(laserDexpEl.value);
+  const d_km = Math.pow(10, dExp);
+
+  document.getElementById('sw-laserF-out').textContent = F.toFixed(3) + ' N';
+  document.getElementById('sw-laserEta-out').textContent = eta.toFixed(2);
+  document.getElementById('sw-laserR-out').textContent = R.toFixed(2);
+  document.getElementById('sw-laserD-out').textContent = d_km >= 1000 ? (d_km/1000).toFixed(0) + ' 000 km' : d_km.toFixed(0) + ' km';
+
+  const { spotDiam, fCap } = laserCap(d_km);
+  const P_target = F * C_LIGHT / (1+R);
+  const P_elec = P_target / (eta * fCap);
+
+  document.getElementById('sw-laser-out').innerHTML =
+    'Mancha del haz ≈ <b>' + spotDiam.toFixed(1) + ' m</b> &nbsp;→&nbsp; captura ≈ <b>' + (fCap*100).toFixed(1) + '%</b><br>' +
+    'P<sub>óptica en objetivo</sub> ≈ <b>' + fmtPower(P_target) + '</b> &nbsp;→&nbsp; P<sub>eléctrica</sub> ≈ <b>' + fmtPower(P_elec) + '</b>';
+
+  const pts = [];
+  for (let e = 2; e <= 6; e += 0.1) {
+    const dk = Math.pow(10, e);
+    const cap = laserCap(dk).fCap;
+    pts.push({x: dk, y: P_target/(eta*cap)});
+  }
+  const yVals = pts.map(p=>p.y);
+  if (!chartLaser) {
+    chartLaser = new Chart(document.getElementById('sw-chart-laser'), {
+      type: 'line',
+      data: { datasets: [
+        { data: pts, borderColor: COL_ACCENT, borderWidth:2, pointRadius:0 },
+        markerDataset(d_km, Math.min(...yVals), Math.max(...yVals))
+      ]},
+      options: Object.assign(baseOpts('d (km)', 'P_eléctrica (W)', true), { scales: { x: { type:'logarithmic', title:{display:true,text:'d (km)', font:{size:10}}, grid:{color:COL_GRID} }, y: { type:'logarithmic', title:{display:true,text:'P_eléctrica (W)', font:{size:10}}, grid:{color:COL_GRID} } } })
+    });
+  } else {
+    chartLaser.data.datasets[0].data = pts;
+    chartLaser.data.datasets[1] = markerDataset(d_km, Math.min(...yVals), Math.max(...yVals));
+    chartLaser.update('none');
+  }
+}
+[laserFEl, laserEtaEl, laserREl, laserDexpEl].forEach(el => el.addEventListener('input', updateLaser));
+updateLaser();
+
+}); // fin withChart
+})();
+</script>
+
+
+---
+
 # 25. Problemas abiertos
 
 La investigación requiere resolver, entre otros, los siguientes problemas:

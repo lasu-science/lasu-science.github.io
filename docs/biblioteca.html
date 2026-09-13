@@ -643,6 +643,13 @@
       } else {
         modalBody.innerHTML = `<pre>${raw}</pre>`;
       }
+      // Los <script> insertados vía innerHTML no se ejecutan solos: se recrean
+      // para que el navegador los corra de verdad (necesario para widgets embebidos en los .md).
+      modalBody.querySelectorAll('script').forEach(old => {
+        const s = document.createElement('script');
+        if (old.src) s.src = old.src; else s.textContent = old.textContent;
+        old.replaceWith(s);
+      });
       typesetMath(modalBody);
     } catch(err){
       modalBody.innerHTML = `<p class="modal-error">No se pudo cargar el informe (“${file}”). Si estás abriendo este HTML directamente desde tu computadora, el navegador puede bloquear esa carga — probá sirviendo la carpeta con un servidor local o subiéndola a un hosting.</p>`;
