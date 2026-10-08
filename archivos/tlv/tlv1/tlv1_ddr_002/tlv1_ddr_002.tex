@@ -1,0 +1,498 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── Packages ─────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{mdframed}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
+
+% ── Geometría ────────────────────────────────────────────────────────────────
+\geometry{
+  top=2.5cm, bottom=2.5cm,
+  left=2.8cm, right=2.8cm,
+  headheight=14pt
+}
+
+% ── Colores ──────────────────────────────────────────────────────────────────
+\definecolor{tlvblue}{RGB}{31, 56, 100}
+\definecolor{tlvmid}{RGB}{46, 80, 144}
+\definecolor{tlvlight}{RGB}{214, 228, 248}
+\definecolor{tlvgray}{RGB}{240, 244, 250}
+\definecolor{tlvrule}{RGB}{200, 200, 200}
+\definecolor{tlvred}{RGB}{180, 40, 40}
+\definecolor{tlvgreen}{RGB}{30, 120, 60}
+\definecolor{tlvorange}{RGB}{200, 100, 0}
+\definecolor{structgray}{RGB}{180, 180, 180}
+\definecolor{zoneyellow}{RGB}{255, 243, 200}
+\definecolor{zoneblue}{RGB}{220, 235, 255}
+\definecolor{zonered}{RGB}{255, 220, 220}
+\definecolor{zonegreen}{RGB}{220, 245, 220}
+
+% ── Hyperref ─────────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true,
+  linkcolor=tlvmid,
+  urlcolor=tlvmid,
+  pdftitle={TLV-1 DDR-002},
+  pdfauthor={Programa TLV}
+}
+
+% ── Encabezados y pie ────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{tlvblue}\textbf{TLV-1} \textbar\ DDR-002}
+\fancyhead[R]{\small\color{tlvblue} Edificio de Ensamblaje e Integración}
+\fancyfoot[C]{\small\color{gray} Página \thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{tlvblue}\leaders\hrule height \headrulewidth\hfill}}
+
+% ── Títulos de sección ───────────────────────────────────────────────────────
+\titleformat{\section}
+  {\large\bfseries\color{tlvblue}}
+  {\thesection.}{0.6em}{}
+  [\vspace{2pt}\color{tlvrule}\titlerule]
+
+\titleformat{\subsection}
+  {\normalsize\bfseries\color{tlvmid}}
+  {\thesubsection.}{0.5em}{}
+
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+
+% ── Columnas de tabla ────────────────────────────────────────────────────────
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ── Comandos utilitarios ─────────────────────────────────────────────────────
+\newcommand{\status}[1]{%
+  \colorbox{tlvgreen}{\color{white}\small\bfseries\strut\ #1\ }%
+}
+\newcommand{\cmark}{\textcolor{tlvgreen}{\textbf{\checkmark}}}
+\newcommand{\xmark}{\textcolor{tlvred}{\textbf{$\times$}}}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ── PORTADA ──────────────────────────────────────────────────────────────────
+\begin{titlepage}
+  \centering
+  \vspace*{3cm}
+
+  {\large\color{gray}\bfseries PROGRAMA TLV}\\[0.4cm]
+  {\Huge\color{tlvblue}\bfseries Test Launch Vehicle 1}\\[0.3cm]
+  {\Large\color{tlvmid} DDR-002 — Design Decision Record}\\[2cm]
+
+  \color{tlvrule}\hrule height 0.8pt
+  \vspace{0.6cm}
+
+  \begin{tabular}{L{4cm} L{9cm}}
+    \rowcolor{tlvgray}
+    \textbf{Documento}   & DDR-002 \\
+    \textbf{Título}      & Edificio de Ensamblaje e Integración (AIT) — Configuración Horizontal \\
+    \rowcolor{tlvgray}
+    \textbf{Subsistema}  & Infraestructura de Tierra / Operaciones \\
+    \textbf{Estado}      & \status{APROBADO} \\
+    \rowcolor{tlvgray}
+    \textbf{Revisión}    & 1.0 \\
+    \textbf{Referencia}  & DDR-001 (Sistema de Separación de Nariz) \\
+  \end{tabular}
+
+  \vspace{0.6cm}
+  \color{tlvrule}\hrule height 0.8pt
+
+  \vfill
+  {\small\color{gray} Programa TLV — Documento de Decisiones de Diseño}
+\end{titlepage}
+
+% ── 1. CONTEXTO ──────────────────────────────────────────────────────────────
+\section{Contexto}
+
+El edificio de Ensamblaje, Integración y Pruebas (AIT, por sus siglas en inglés) es la instalación donde el TLV-1 se construye, integra y verifica antes del traslado a la plataforma de lanzamiento. Dado que el TLV-1 es un vehículo de 5 m de longitud y 369 kg de masa total, la instalación puede ser considerablemente más compacta que las típicas torres de integración vertical usadas en vehículos de mayor escala.
+
+Este DDR documenta la decisión de adoptar una configuración de ensamblaje \textbf{horizontal} y define los parámetros dimensionales, zonificación, condiciones de seguridad y secuencia de integración del edificio AIT.
+
+% ── 2. PARÁMETROS DEL VEHÍCULO RELEVANTES ────────────────────────────────────
+\section{Parámetros del Vehículo Relevantes}
+
+\begin{longtable}{L{5.5cm} C{3cm} L{5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Parámetro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Impacto en AIT} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Parámetro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Impacto en AIT} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Longitud total              & 5000 mm    & Define largo mínimo del edificio \\
+  Diámetro exterior           & 330 mm     & Define ancho mínimo de la mesa \\
+  Masa total al despegue      & $\approx$369 kg & Define capacidad de carga de mesa y erector \\
+  \rowcolor{tlvgray}
+  Masa propelente (APCP)      & $\approx$119 kg & Almacenamiento externo requerido \\
+  Masa estructura estimada    & $\approx$250 kg & Carga de trabajo en mesa \\
+  \rowcolor{tlvgray}
+  FTS                         & Pirotécnico con pasador mecánico & Requiere zona de integración controlada \\
+  Secciones principales       & 5 (nariz, control, motor, recuperación, tobera) & Define flujo de integración \\
+\end{longtable}
+
+% ── 3. PROBLEMA ──────────────────────────────────────────────────────────────
+\section{Definición del Problema}
+
+Se necesita una instalación que:
+
+\begin{enumerate}[leftmargin=1.5cm, itemsep=3pt]
+  \item Permita el ensamblaje completo del TLV-1 en condiciones controladas de temperatura, limpieza y seguridad.
+  \item Minimice la complejidad constructiva y el costo de la instalación, coherente con la escala del programa.
+  \item Gestione correctamente los riesgos asociados al FTS pirotécnico durante la integración.
+  \item Provea espacio suficiente para el personal y el equipamiento de verificación de aviónica.
+  \item Sea compatible con el traslado del vehículo a la plataforma de lanzamiento y su posterior erección vertical.
+\end{enumerate}
+
+% ── 4. ANÁLISIS DE CONFIGURACIÓN ─────────────────────────────────────────────
+\section{An\'{a}lisis de Configuraci\'{o}n}
+
+\subsection{Horizontal vs. vertical}
+
+La integración en vertical requiere una estructura de al menos 5 m de altura interior libre, lo que implica un edificio de 7--8 m de alto con plataformas de trabajo escalonadas. Para un vehículo de esta escala, ese costo constructivo no está justificado.
+
+La integración en horizontal es viable con las siguientes condiciones, todas resueltas:
+
+\begin{longtable}{L{5cm} L{4.5cm} L{4cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Preocupación} &
+  \color{white}\textbf{Mitigación adoptada} &
+  \color{white}\textbf{Estado} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Preocupación} &
+  \color{white}\textbf{Mitigación adoptada} &
+  \color{white}\textbf{Estado} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Momento flector sobre carcasa & Mesa de soporte continuo de alta rigidez & \cmark\ Resuelto \\
+  Deformación del liner por peso propio del motor & Motor se instala D$-$3 antes del lanzamiento & \cmark\ Resuelto \\
+  \rowcolor{tlvgray}
+  Calibración del IMU en orientación incorrecta & IMU calibrado a 0° horizontal = 90° en vertical & \cmark\ Resuelto \\
+  Altura de edificio & 3 m suficiente en configuración horizontal & \cmark\ Resuelto \\
+\end{longtable}
+
+\subsection{Almacenamiento de propelente}
+
+Los $\approx$119 kg de APCP se reciben de un proveedor externo los días previos al lanzamiento y se instalan directamente en el vehículo. El edificio AIT \textbf{no almacena propelente} en condiciones normales, lo que:
+
+\begin{itemize}[leftmargin=1.5cm, itemsep=3pt]
+  \item Elimina el requerimiento de bunker o sala de explosivos en el edificio.
+  \item Simplifica radicalmente los permisos de construcción y operación.
+  \item Elimina el riesgo de deterioro del propelente por almacenamiento prolongado.
+  \item Reduce el personal de seguridad requerido en la instalación.
+\end{itemize}
+
+\subsection{Gestión del FTS}
+
+El FTS pirotécnico se integra en el edificio con el pasador de seguridad mecánico instalado. El sistema permanece en estado \textbf{seguro} (pasador insertado) durante toda la permanencia en el edificio. El retiro del pasador se realiza únicamente en la plataforma de lanzamiento, en la secuencia de cuenta regresiva, por personal autorizado.
+
+Esto clasifica el FTS como un riesgo gestionado por procedimiento, no por infraestructura, lo que no impone requerimientos constructivos adicionales al edificio.
+
+% ── 5. DIMENSIONES Y ZONIFICACIÓN ────────────────────────────────────────────
+\section{Dimensiones y Zonificación}
+
+\subsection{Dimensiones generales}
+
+\begin{longtable}{L{4cm} C{3cm} L{6.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Dimensión} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Justificación} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Dimensión} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Justificación} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Largo interior & 6.5 m & 5 m vehículo + 0.75 m espacio libre en cada extremo \\
+  Ancho interior & 4.0 m & Mesa central (1.0 m) + circulación en ambos lados (1.5 m c/u) \\
+  \rowcolor{tlvgray}
+  Alto interior  & 3.0 m & Sin requerimiento vertical; ventilación y circulación de personal \\
+  Área total     & 26 m² & Compacto, coherente con escala del programa \\
+\end{longtable}
+
+\subsection{Zonificación interior}
+
+\begin{longtable}{C{1.2cm} L{3cm} C{2cm} L{6.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Zona} &
+  \color{white}\textbf{Nombre} &
+  \color{white}\textbf{Área aprox.} &
+  \color{white}\textbf{Función} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Zona} &
+  \color{white}\textbf{Nombre} &
+  \color{white}\textbf{Área aprox.} &
+  \color{white}\textbf{Función} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Z-1 & Mesa de integración & 6.5 m $\times$ 1 m & Soporte continuo del vehículo; alta rigidez estructural \\
+  Z-2 & Banco de aviónica   & 2 m $\times$ 1.5 m & Verificación de AFCC, IMU, GNSS, telemetría y actuadores antes de instalación \\
+  \rowcolor{tlvgray}
+  Z-3 & Zona FTS            & 1.5 m $\times$ 1.5 m & Integración del FTS con pasador de seguridad; acceso restringido \\
+  Z-4 & Almacén general     & 2 m $\times$ 1.5 m & Herramientas, consumibles, EPP, documentación \\
+  \rowcolor{tlvgray}
+  Z-5 & Circulación         & Perímetro & Paso libre mínimo de 1.2 m en ambos lados de la mesa \\
+\end{longtable}
+
+\subsection{Planta esquemática}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9]
+
+  % Perímetro del edificio
+  \draw[thick, color=tlvblue, fill=tlvgray!30]
+    (0,0) rectangle (13,8);
+
+  % Z-1: Mesa de integración (zona central longitudinal)
+  \fill[zoneblue]
+    (0.5, 3.2) rectangle (13, 4.8);
+  \draw[tlvmid, thick]
+    (0.5, 3.2) rectangle (13, 4.8);
+  \node[font=\small\bfseries, color=tlvmid] at (6.75, 4.0)
+    {Z-1 — Mesa de integración continua};
+
+  % Cohete esquemático sobre la mesa
+  \fill[white, draw=tlvblue, rounded corners=3pt]
+    (1.0, 3.5) rectangle (12.5, 4.5);
+  % Nariz
+  \fill[tlvblue]
+    (1.0, 3.5) -- (0.3, 4.0) -- (1.0, 4.5) -- cycle;
+  % Etiqueta cohete
+  \node[font=\tiny, color=tlvblue] at (6.75, 3.8) {TLV-1 (5000 mm)};
+
+  % Z-2: Banco aviónica (esquina superior derecha)
+  \fill[zonegreen]
+    (9.5, 5.5) rectangle (12.5, 7.5);
+  \draw[tlvgreen!70!black, thick]
+    (9.5, 5.5) rectangle (12.5, 7.5);
+  \node[font=\small\bfseries, color=tlvgreen!70!black, align=center] at (11.0, 6.5)
+    {Z-2\\Banco\\aviónica};
+
+  % Z-3: Zona FTS (esquina inferior derecha)
+  \fill[zonered]
+    (9.5, 0.5) rectangle (12.5, 2.5);
+  \draw[tlvred, thick]
+    (9.5, 0.5) rectangle (12.5, 2.5);
+  \node[font=\small\bfseries, color=tlvred, align=center] at (11.0, 1.5)
+    {Z-3\\FTS\\(acceso restringido)};
+
+  % Z-4: Almacén (esquina superior izquierda)
+  \fill[zoneyellow]
+    (0.5, 5.5) rectangle (3.5, 7.5);
+  \draw[tlvorange, thick]
+    (0.5, 5.5) rectangle (3.5, 7.5);
+  \node[font=\small\bfseries, color=tlvorange, align=center] at (2.0, 6.5)
+    {Z-4\\Almacén};
+
+  % Puerta principal (lado izquierdo inferior)
+  \draw[white, line width=4pt]
+    (0, 1.0) -- (0, 2.5);
+  \draw[tlvblue, dashed]
+    (0, 1.0) -- (0, 2.5);
+  \node[font=\tiny, color=tlvblue] at (-0.8, 1.75) {Puerta};
+
+  % Ventilacion (techo)
+  \draw[tlvmid, -latex] (2, 8) -- (2, 8.6);
+  \draw[tlvmid, -latex] (4.5, 8) -- (4.5, 8.6);
+  \draw[tlvmid, -latex] (7, 8) -- (7, 8.6);
+  \draw[tlvmid, -latex] (9.5, 8) -- (9.5, 8.6);
+  \draw[tlvmid, -latex] (12, 8) -- (12, 8.6);
+  \node[font=\tiny, color=tlvmid] at (6.75, 8.85) {Extraccion ventilacion forzada};
+
+  % Cotas
+  \draw[latex-latex, gray] (0, -0.4) -- (13, -0.4);
+  \node[font=\small, color=gray] at (6.5, -0.75) {6.5 m (interior)};
+
+  \draw[latex-latex, gray] (13.6, 0) -- (13.6, 8);
+  \node[font=\small, color=gray, rotate=90] at (14.1, 4) {4.0 m (interior)};
+
+\end{tikzpicture}
+\end{center}
+
+% ── 6. MESA DE INTEGRACIÓN ───────────────────────────────────────────────────
+\section{Mesa de Integración (Z-1)}
+
+La mesa es el elemento estructural crítico del edificio. Sus requerimientos son:
+
+\begin{longtable}{L{5cm} L{8.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Requerimiento} &
+  \color{white}\textbf{Especificación} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Requerimiento} &
+  \color{white}\textbf{Especificación} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Longitud útil             & $\geq$ 5500 mm (vehículo + márgenes de extremo) \\
+  Capacidad de carga        & $\geq$ 400 kg distribuidos (369 kg vehículo + herramientas) \\
+  \rowcolor{tlvgray}
+  Deflexión máxima admisible & $\leq$ 1 mm en el punto central bajo carga total \\
+  Altura de trabajo         & 800--900 mm desde el suelo (ergonomía de pie) \\
+  \rowcolor{tlvgray}
+  Superficie                & Acero inoxidable o aluminio anodizado; no magnética en zona de aviónica \\
+  Soporte del vehículo      & Perfiles en V o cunas cada 500--800 mm para distribuir la carga \\
+\end{longtable}
+
+La condición de deflexión $\leq 1\ \text{mm}$ es el constraint de diseño dominante. Para una viga simplemente apoyada de longitud $L = 5.5\ \text{m}$ con carga distribuida $q = 369/5.5 \approx 67\ \text{kg/m}$:
+
+\begin{equation}
+  \delta_{max} = \frac{5\,q\,L^4}{384\,E\,I} \leq 1\ \text{mm}
+\end{equation}
+
+El momento de inercia mínimo requerido para una mesa de acero ($E = 205\ \text{GPa}$) es:
+
+\begin{equation}
+  I_{min} = \frac{5 \times 657 \times 5.5^4}{384 \times 205 \times 10^9 \times 0.001}
+  = \frac{5 \times 657 \times 915.1}{384 \times 2.05 \times 10^8}
+  \approx 2.41 \times 10^{-5}\ \text{m}^4
+\end{equation}
+
+Un perfil HEB-140 ($I = 5.41 \times 10^{-5}\ \text{m}^4$) o dos perfiles UPN-120 en paralelo satisfacen este requerimiento con margen.
+
+% ── 7. CONDICIONES AMBIENTALES Y VENTILACIÓN ─────────────────────────────────
+\section{Condiciones Ambientales y Ventilación}
+
+\begin{longtable}{L{4.5cm} L{9cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Parámetro} &
+  \color{white}\textbf{Especificación} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Parámetro} &
+  \color{white}\textbf{Especificación} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Temperatura interior      & 15--30°C (sin control activo en TLV-1; ventilación pasiva suficiente) \\
+  Humedad relativa          & $\leq$ 60\% (protección de aviónica; deshumidificador portátil si necesario) \\
+  \rowcolor{tlvgray}
+  Ventilación               & Forzada por extractor; mínimo 6 renovaciones/hora del volumen interior \\
+  Volumen interior          & $6.5 \times 4.0 \times 3.0 = 78\ \text{m}^3$ \\
+  \rowcolor{tlvgray}
+  Caudal mínimo de extracción & $78 \times 6 = 468\ \text{m}^3/\text{h}$ $\rightarrow$ extractor de $\geq 500\ \text{m}^3/\text{h}$ \\
+  Filtración de entrada     & Prefiltro de partículas F5 (protección básica de aviónica) \\
+  \rowcolor{tlvgray}
+  Detectores                & CO + gases inflamables; alarma local y corte automático de ventilación \\
+\end{longtable}
+
+% ── 8. SEGURIDAD ─────────────────────────────────────────────────────────────
+\section{Seguridad}
+
+\subsection{Clasificación de riesgo del edificio}
+
+Durante la mayor parte del ciclo de integración, el edificio contiene únicamente componentes estructurales, aviónica y el FTS asegurado mecánicamente. El propelente APCP no es almacenado en el edificio. La clasificación de riesgo es por tanto \textbf{baja} durante integración normal, elevándose a \textbf{media} únicamente durante la instalación del motor (D$-$3 a D$-$1).
+
+\subsection{Medidas adoptadas}
+
+\begin{longtable}{C{1cm} L{5.5cm} L{7cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID} &
+  \color{white}\textbf{Medida} &
+  \color{white}\textbf{Justificación} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID} &
+  \color{white}\textbf{Medida} &
+  \color{white}\textbf{Justificación} \\
+  \endhead
+  \rowcolor{tlvgray}
+  S-01 & Mínimo 2 personas simultáneas durante integración de motor y FTS & Norma de seguridad para trabajo con explosivos y propelente \\
+  S-02 & FTS con pasador mecánico insertado en todo momento dentro del edificio & El estado seguro es estructural, no dependiente de electrónica \\
+  \rowcolor{tlvgray}
+  S-03 & Acceso a Z-3 (FTS) restringido a personal autorizado & Minimiza exposición del personal no involucrado \\
+  S-04 & EPP obligatorio en zona de motor: guantes, gafas, calzado antiestático & Prevención de ignición accidental por descarga electrostática \\
+  \rowcolor{tlvgray}
+  S-05 & Extintor de CO\textsubscript{2} (no agua ni polvo) en cada zona & El agua reacciona con APCP; el polvo contamina aviónica \\
+  S-06 & Protocolo escrito de recepción del propelente (D$-$3) & Trazabilidad y verificación de integridad del grano \\
+  \rowcolor{tlvgray}
+  S-07 & Toma a tierra del edificio y de la mesa & Prevención de descarga electrostática durante manipulación de aviónica y FTS \\
+\end{longtable}
+
+% ── 9. SECUENCIA DE INTEGRACIÓN ──────────────────────────────────────────────
+\section{Secuencia de Integración}
+
+\begin{longtable}{C{1.2cm} L{3.5cm} C{2cm} L{6.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Fase} &
+  \color{white}\textbf{Actividad} &
+  \color{white}\textbf{Día} &
+  \color{white}\textbf{Notas} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Fase} &
+  \color{white}\textbf{Actividad} &
+  \color{white}\textbf{Día} &
+  \color{white}\textbf{Notas} \\
+  \endhead
+  \rowcolor{tlvgray}
+  F-01 & Verificación aviónica (banco Z-2) & D$-$N & AFCC, IMU, GNSS, telemetría, actuadores de aletas. IMU calibrado a 0° horizontal. \\
+  F-02 & Integración nariz + aviónica & D$-$N & Aviónica verificada se instala en Body\_Nariz. Pitot-estáticos conectados. \\
+  \rowcolor{tlvgray}
+  F-03 & Integración sección de control & D$-$N & Actuadores, servos y superficies de control. Verificación de rango de movimiento. \\
+  F-04 & Integración sección de recuperación & D$-$N & Paracaídas plegado e instalado. Conexión eléctrica al AFCC. \\
+  \rowcolor{tlvgray}
+  F-05 & Integración FTS (Z-3) & D$-$N & Pirotécnicos del FTS instalados con pasador de seguridad. Verificación de continuidad eléctrica. \\
+  F-06 & Ensayo funcional general & D$-$N & Simulación de secuencia de vuelo completa sin propelente. Telemetría end-to-end. \\
+  \rowcolor{tlvgray}
+  F-07 & Recepción e instalación de motor (APCP) & D$-$3 & Proveedor externo entrega el propelente. Instalación en carcasa. Verificación de igniter. \\
+  F-08 & Verificación final integrada & D$-$1 & Inspección visual completa, verificación de conexiones, peso final del vehículo. \\
+  \rowcolor{tlvgray}
+  F-09 & Traslado a plataforma & D-0 & Vehículo completo trasladado horizontal. Erección en plataforma. Retiro de pasador FTS. \\
+\end{longtable}
+
+% ── 10. ELEMENTOS PENDIENTES ─────────────────────────────────────────────────
+\section{Elementos Pendientes}
+
+\begin{longtable}{C{1cm} L{8cm} C{2.2cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID} &
+  \color{white}\textbf{Descripción} &
+  \color{white}\textbf{Prioridad} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID} &
+  \color{white}\textbf{Descripción} &
+  \color{white}\textbf{Prioridad} \\
+  \endhead
+  \rowcolor{tlvgray}
+  P-01 & Definir ubicación física del edificio AIT relativa a la plataforma de lanzamiento; impacta diseño del sistema de traslado. & \textcolor{tlvred}{\textbf{Alta}} \\
+  P-02 & Diseñar sistema de traslado horizontal (carro o rieles) entre AIT y plataforma. & \textcolor{tlvred}{\textbf{Alta}} \\
+  \rowcolor{tlvgray}
+  P-03 & Diseñar erector hidráulico de pivote (DDR-003). Fuerza requerida a determinar según geometría del brazo. & \textcolor{tlvred}{\textbf{Alta}} \\
+  P-04 & Verificar normativa local aplicable al almacenamiento transitorio de APCP durante F-07 y F-08 ($\approx$48 h con propelente en el edificio). & \textcolor{tlvorange}{\textbf{Media}} \\
+  \rowcolor{tlvgray}
+  P-05 & Especificar mesa de integración: selección de perfil estructural, material de superficie y sistema de cunas de soporte del vehículo. & \textcolor{tlvorange}{\textbf{Media}} \\
+  P-06 & Definir sistema de toma a tierra y protección antiestática de la mesa. & \textcolor{tlvorange}{\textbf{Media}} \\
+  \rowcolor{tlvgray}
+  P-07 & Elaborar protocolo escrito de recepción de propelente (S-06). & \textbf{Baja} \\
+\end{longtable}
+
+\end{document}

@@ -1,0 +1,388 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── Packages ─────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{mdframed}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds,shapes.geometric}
+
+\geometry{top=2.5cm,bottom=2.5cm,left=2.8cm,right=2.8cm,headheight=14pt}
+
+\definecolor{tlvblue}{RGB}{31,56,100}
+\definecolor{tlvmid}{RGB}{46,80,144}
+\definecolor{tlvlight}{RGB}{214,228,248}
+\definecolor{tlvgray}{RGB}{240,244,250}
+\definecolor{tlvrule}{RGB}{200,200,200}
+\definecolor{tlvred}{RGB}{180,40,40}
+\definecolor{tlvgreen}{RGB}{30,120,60}
+\definecolor{tlvorange}{RGB}{200,100,0}
+\definecolor{hw}{RGB}{60,120,80}
+\definecolor{hwlight}{RGB}{200,235,210}
+\definecolor{sensor}{RGB}{120,60,140}
+\definecolor{sensorlight}{RGB}{230,210,240}
+\definecolor{power}{RGB}{180,120,0}
+\definecolor{powerlight}{RGB}{250,235,190}
+\definecolor{comms}{RGB}{30,100,160}
+\definecolor{commslight}{RGB}{200,225,250}
+
+\hypersetup{colorlinks=true,linkcolor=tlvmid,urlcolor=tlvmid,
+  pdftitle={TLV-1 DDR-005},pdfauthor={Programa TLV}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{tlvblue}\textbf{TLV-1} \textbar\ DDR-005}
+\fancyhead[R]{\small\color{tlvblue} Sistema de Avi\'{o}nica}
+\fancyfoot[C]{\small\color{gray} P\'{a}gina \thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{tlvblue}\leaders\hrule height \headrulewidth\hfill}}
+
+\titleformat{\section}{\large\bfseries\color{tlvblue}}{\thesection.}{0.6em}{}
+  [\vspace{2pt}\color{tlvrule}\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{tlvmid}}{\thesubsection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+\newcommand{\status}[1]{\colorbox{tlvgreen}{\color{white}\small\bfseries\strut\ #1\ }}
+\newcommand{\cmark}{\textcolor{tlvgreen}{\textbf{\checkmark}}}
+\newcommand{\xmark}{\textcolor{tlvred}{\textbf{$\times$}}}
+
+\begin{document}
+
+\begin{titlepage}
+  \centering\vspace*{3cm}
+  {\large\color{gray}\bfseries PROGRAMA TLV}\\[0.4cm]
+  {\Huge\color{tlvblue}\bfseries Test Launch Vehicle 1}\\[0.3cm]
+  {\Large\color{tlvmid} DDR-005 --- Design Decision Record}\\[2cm]
+  \color{tlvrule}\hrule height 0.8pt\vspace{0.6cm}
+  \begin{tabular}{L{4cm} L{9cm}}
+    \rowcolor{tlvgray}
+    \textbf{Documento}    & DDR-005 \\
+    \textbf{T\'{i}tulo}   & Sistema de Avi\'{o}nica --- Arquitectura, Plataforma Modular y Hardware \\
+    \rowcolor{tlvgray}
+    \textbf{Subsistema}   & Avi\'{o}nica / AFCC \\
+    \textbf{Estado}       & \status{APROBADO} \\
+    \rowcolor{tlvgray}
+    \textbf{Revisi\'{o}n} & 1.0 \\
+    \textbf{Referencias}  & DDR-001, DDR-004 \\
+  \end{tabular}
+  \vspace{0.6cm}\color{tlvrule}\hrule height 0.8pt\vfill
+  {\small\color{gray} Programa TLV --- Documento de Decisiones de Dise\~{n}o}
+\end{titlepage}
+
+\section{Contexto}
+
+Este DDR documenta la arquitectura del sistema de avi\'{o}nica del TLV-1: la decisi\'{o}n de alojar todo el hardware en una plataforma modular amortiguada dentro de la nariz eyectable, el inventario de hardware, el sistema de umbilical el\'{e}ctrico y las decisiones de protecci\'{o}n mec\'{a}nica y t\'{e}rmica. La arquitectura surgi\'{o} como soluci\'{o}n a tres problemas identificados durante el proceso de dise\~{n}o, documentados en la Secci\'{o}n~3.
+
+\section{Requerimientos}
+
+\begin{longtable}{C{1cm} L{5.5cm} C{2.5cm} L{4cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID}&\color{white}\textbf{Requerimiento}&
+  \color{white}\textbf{Valor}&\color{white}\textbf{Origen}\\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID}&\color{white}\textbf{Requerimiento}&
+  \color{white}\textbf{Valor}&\color{white}\textbf{Origen}\\
+  \endhead
+  \rowcolor{tlvgray}
+  R-01 & Latencia de telemetr\'{i}a          & $\leq$30 ms           & Objetivo TLV-1 \\
+  R-02 & Ancho de banda uplink/downlink      & $\geq$50 Mbps         & Objetivo TLV-1 \\
+  \rowcolor{tlvgray}
+  R-03 & Precisi\'{o}n de aterrizaje         & $\leq$50 m error      & Objetivo TLV-1 \\
+  R-04 & Estabilidad angular                 & $\alpha\leq2°$, $\omega_y\leq0.01$ rad/s & Objetivo TLV-1 \\
+  \rowcolor{tlvgray}
+  R-05 & Aceleraci\'{o}n m\'{a}x.\ admisible & $\leq$10 m/s$^2$      & L\'{i}mite hardware COTS \\
+  R-06 & Supervivencia al impacto            & Hardware intacto       & Recuperabilidad \\
+  \rowcolor{tlvgray}
+  R-07 & Modularidad                         & Plataforma extra\'{i}ble & Operaciones \\
+  R-08 & Aislaci\'{o}n t\'{e}rmica           & Hardware $\leq$70\textdegree C & L\'{i}mite componentes \\
+\end{longtable}
+
+\section{Problemas Resueltos}
+
+\subsection{P-1: FADS incompatible con nariz eyectable}
+
+\textbf{Situaci\'{o}n:} El FADS usa cuatro tubos Pitot-est\'{a}ticos en la interfaz nariz-fuselaje. Una nariz eyectable simple implicaba perder los sensores en cada misi\'{o}n.
+
+\textbf{Decisi\'{o}n:} Convertir la nariz en un \textbf{vessel aut\'{o}nomo recuperable} que act\'{u}a como drogue del parac\'{a}idas principal. El FADS opera durante todo el ascenso y cumple su funci\'{o}n antes del apogeo. La nariz desciende con su propio parac\'{a}idas secundario y es recuperada intacta.
+
+\subsection{P-2: Protecci\'{o}n mec\'{a}nica y t\'{e}rmica}
+
+\textbf{Situaci\'{o}n:} Las vibraciones del motor APCP durante 33.5 s y el impacto en tierra pueden da\~{n}ar componentes COTS.
+
+\textbf{Decisi\'{o}n:} Plataforma de avi\'{o}nica sobre \textbf{amortiguadores viscoel\'{a}sticos} dentro de la nariz. Protecci\'{o}n doble: parac\'{a}idas secundario de la nariz m\'{a}s amortiguadores de la plataforma.
+
+\subsection{P-3: Acceso entre misiones}
+
+\textbf{Situaci\'{o}n:} Hardware integrado permanentemente obliga a desmontar la nariz para cualquier verificaci\'{o}n o actualizaci\'{o}n.
+
+\textbf{Decisi\'{o}n:} Plataforma \textbf{modular extra\'{i}ble} por tapa desmontable en la base de la nariz. Verificable en banco sin tocar la estructura.
+
+\section{Arquitectura de la Plataforma}
+
+\subsection{Diagrama de la nariz}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.82]
+  % Perfil ogiva
+  \fill[tlvgray!40]
+    (-2.2,0)..controls(-2.2,4)and(-0.5,7)..(0,7.5)
+    ..controls(0.5,7)and(2.2,4)..(2.2,0)--cycle;
+  \draw[tlvblue,thick]
+    (-2.2,0)..controls(-2.2,4)and(-0.5,7)..(0,7.5)
+    ..controls(0.5,7)and(2.2,4)..(2.2,0);
+  % Truncado
+  \fill[tlvblue!30](-0.3,7.35)rectangle(0.3,7.55);
+  \draw[tlvblue](-0.3,7.35)rectangle(0.3,7.55);
+  % Tapa
+  \fill[tlvorange!40](-2.2,0)rectangle(2.2,0.3);
+  \draw[tlvorange,thick](-2.2,0)rectangle(2.2,0.3);
+  \node[font=\tiny\bfseries,color=tlvorange]at(0,0.15){Tapa desmontable};
+  % Shear pins
+  \fill[tlvred!20](-2.2,-0.5)rectangle(2.2,0);
+  \draw[tlvred,thick](-2.2,-0.5)rectangle(2.2,0);
+  \foreach \x in {-1.8,-1.1,-0.4,0.4,1.1,1.8}
+    \fill[tlvred](\x,-0.25)circle(0.1);
+  \node[font=\tiny,color=tlvred]at(3.2,-0.25){6 shear pins};
+  \draw[tlvred,thin](2.2,-0.25)--(2.9,-0.25);
+  % Plataforma
+  \fill[hwlight](-1.9,0.4)rectangle(1.9,2.8);
+  \draw[hw,thick](-1.9,0.4)rectangle(1.9,2.8);
+  % Amortiguadores
+  \foreach \x in {-1.6,1.6}{
+    \fill[tlvorange!60](\x-0.15,0.3)rectangle(\x+0.15,0.45);
+    \draw[tlvorange](\x-0.15,0.3)rectangle(\x+0.15,0.45);}
+  \node[font=\tiny,color=tlvorange]at(-3.2,0.37){Amortiguadores};
+  \draw[tlvorange,thin](-2.2,0.37)--(-1.75,0.37);
+  % AFCC
+  \fill[hw!60](-1.6,0.55)rectangle(0.0,1.4);
+  \draw[hw](-1.6,0.55)rectangle(0.0,1.4);
+  \node[font=\tiny\bfseries,color=white,align=center]at(-0.8,0.97){AFCC\\RISC-V};
+  % IMU+GNSS
+  \fill[sensor!60](0.1,0.55)rectangle(1.6,1.05);
+  \draw[sensor](0.1,0.55)rectangle(1.6,1.05);
+  \node[font=\tiny\bfseries,color=white]at(0.85,0.80){IMU+GNSS};
+  % FADS
+  \fill[sensorlight](0.1,1.1)rectangle(1.6,1.6);
+  \draw[sensor](0.1,1.1)rectangle(1.6,1.6);
+  \node[font=\tiny\bfseries,color=sensor]at(0.85,1.35){FADS};
+  % Telemetria
+  \fill[commslight](-1.6,1.5)rectangle(0.0,2.1);
+  \draw[comms](-1.6,1.5)rectangle(0.0,2.1);
+  \node[font=\tiny\bfseries,color=comms]at(-0.8,1.80){Telemetr\'{i}a};
+  % Bateria
+  \fill[powerlight](-1.6,2.15)rectangle(0.6,2.7);
+  \draw[power](-1.6,2.15)rectangle(0.6,2.7);
+  \node[font=\tiny\bfseries,color=power]at(-0.5,2.42){Bater\'{i}a};
+  % Circuito disparo
+  \fill[tlvred!20](0.7,2.15)rectangle(1.6,2.7);
+  \draw[tlvred](0.7,2.15)rectangle(1.6,2.7);
+  \node[font=\tiny\bfseries,color=tlvred,align=center]at(1.15,2.42){Disparo\\caps.};
+  % Etiqueta plataforma
+  \node[font=\small\bfseries,color=hw]at(3.5,1.6){Plataforma};
+  \node[font=\small\bfseries,color=hw]at(3.5,1.3){Avi\'{o}nica};
+  \draw[hw,thin](1.9,1.6)--(3.0,1.6);
+  % Zona paracaidas
+  \fill[commslight!50]
+    (-1.9,2.9)..controls(-1.9,5.5)and(-0.3,6.8)..(0,7.1)
+    ..controls(0.3,6.8)and(1.9,5.5)..(1.9,2.9)--cycle;
+  \node[font=\small\bfseries,color=comms,align=center]at(0,5.0)
+    {Parac\'{a}idas\\secundario};
+  % Cable extraccion
+  \draw[tlvred,thick,dashed](0,2.9)--(0,3.8);
+  \node[font=\tiny,color=tlvred]at(1.8,3.35){Cable extracci\'{o}n};
+  \draw[tlvred,thin](0.15,3.35)--(1.3,3.35);
+  % Umbilical
+  \draw[tlvorange,thick](0,-0.5)--(0,-1.2);
+  \fill[tlvorange](-0.3,-1.2)rectangle(0.3,-1.0);
+  \node[font=\tiny,color=tlvorange]at(2.2,-1.1){Umbilical ZRF};
+  \draw[tlvorange,thin](0.3,-1.1)--(1.6,-1.1);
+  % Fuselaje
+  \fill[tlvblue!10](-2.2,-2.0)rectangle(2.2,-1.2);
+  \draw[tlvblue,thick](-2.2,-2.0)rectangle(2.2,-1.2);
+  \node[font=\small\bfseries,color=tlvblue]at(0,-1.6){Fuselaje};
+\end{tikzpicture}
+\end{center}
+
+\subsection{Especificaciones de la plataforma}
+
+\begin{longtable}{L{5cm} C{3cm} L{5.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro}&\color{white}\textbf{Valor}&\color{white}\textbf{Notas}\\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro}&\color{white}\textbf{Valor}&\color{white}\textbf{Notas}\\
+  \endhead
+  \rowcolor{tlvgray}
+  Di\'{a}metro m\'{a}ximo         & 300 mm       & 322 mm interior nariz menos margen \\
+  Altura                           & 150--200 mm  & Pendiente BOM de hardware \\
+  \rowcolor{tlvgray}
+  Material                         & Al 6061-T6   & Ligero, mecanizable \\
+  Puntos de amortiguaci\'{o}n      & 4            & Silentblocks viscoel\'{a}sticos \\
+  \rowcolor{tlvgray}
+  Acceso                           & Tapa desmontable superior & Soldada tras verificaci\'{o}n \\
+  Masa estimada (plataforma sola)  & $\leq$5 kg   & Pendiente BOM \\
+\end{longtable}
+
+\section{Hardware de Vuelo}
+
+\begin{longtable}{L{2.8cm} L{4.8cm} C{2cm} L{4cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Subsistema}&\color{white}\textbf{Funci\'{o}n}&
+  \color{white}\textbf{Ubicaci\'{o}n}&\color{white}\textbf{Notas}\\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Subsistema}&\color{white}\textbf{Funci\'{o}n}&
+  \color{white}\textbf{Ubicaci\'{o}n}&\color{white}\textbf{Notas}\\
+  \endhead
+  \rowcolor{tlvgray}
+  AFCC (RISC-V)     & N\'{u}cleo de c\'{o}mputo; PID, secuencias, disparo shear pins & Plataforma & C++/Python 3 \\
+  IMU               & Aceleraci\'{o}n, velocidad angular, orientaci\'{o}n & Plataforma & Calibrado 0\textdegree\ horiz. \\
+  \rowcolor{tlvgray}
+  GNSS              & Posici\'{o}n y velocidad & Plataforma & Integrado con IMU \\
+  FADS              & Presi\'{o}n diferencial 4 puntos cardinales & Plataforma + interfaz & 4 tubos Pitot \\
+  \rowcolor{tlvgray}
+  Telemetr\'{i}a    & H.264, $\geq$50 Mbps, $\leq$30 ms latencia & Plataforma & Antena omni en nariz \\
+  Bater\'{i}a       & Alimentaci\'{o}n plataforma completa & Plataforma & Misi\'{o}n + margen \\
+  \rowcolor{tlvgray}
+  Circuito disparo  & 6 capacitores + SCR/MOSFET & Plataforma & Se\~{n}al desde AFCC \\
+  Sensor RTD/AFC    & Temperatura tobera y c\'{a}mara & Fuselaje & V\'{i}a umbilical ZRF \\
+  \rowcolor{tlvgray}
+  Actuadores aletas & Superficies de control + rejillas & Fuselaje & V\'{i}a umbilical ZRF \\
+\end{longtable}
+
+\section{Sistema FADS}
+
+Los cuatro tubos Pitot-est\'{a}ticos est\'{a}n ubicados en los bordes superiores de la interfaz nariz-fuselaje, uno por punto cardinal. Esta ubicaci\'{o}n fue validada mediante CFD: la presi\'{o}n en la zona de interfaz es baja durante el vuelo nominal, minimizando errores de medici\'{o}n. Los tubos conectan mediante un manifold interno a cuatro sensores de presi\'{o}n diferencial en la plataforma.
+
+\begin{longtable}{L{3cm} C{2.5cm} L{8cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Fase}&\color{white}\textbf{Estado FADS}&\color{white}\textbf{Funci\'{o}n}\\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Fase}&\color{white}\textbf{Estado FADS}&\color{white}\textbf{Funci\'{o}n}\\
+  \endhead
+  \rowcolor{tlvgray}
+  Despegue -- Mach 1 & Activo & Control de $\alpha$; datos al PID \\
+  Mach 1 -- Burnout  & Activo & Medici\'{o}n en r\'{e}gimen transs\'{o}nico \\
+  \rowcolor{tlvgray}
+  Burnout -- Apogeo  & Activo & Datos de navegaci\'{o}n en costa \\
+  Apogeo             & \'{U}ltima lectura & AFCC registra estado final \\
+  \rowcolor{tlvgray}
+  Post-eyecci\'{o}n  & Inactivo & Umbilical desconectado \\
+\end{longtable}
+
+\begin{mdframed}[linecolor=tlvgreen,linewidth=0.8pt,backgroundcolor=tlvgray]
+  \small\textit{El FADS cumple su funci\'{o}n de vuelo completa antes de la eyecci\'{o}n. La decisi\'{o}n de eyectar la nariz en el apogeo es plenamente compatible con el ciclo operativo del FADS.}
+\end{mdframed}
+
+\section{Umbilical El\'{e}ctrico Nariz -- Fuselaje}
+
+El umbilical conecta la plataforma de avi\'{o}nica con los actuadores y sensores del fuselaje. Se adopta un conector tipo \textbf{Zero Retention Force (ZRF)}: acoplado por geometr\'{i}a durante el vuelo, se separa sin fuerza cuando la nariz se desplaza axialmente en la eyecci\'{o}n. La alternativa de umbilical calibrado por tensi\'{o}n fue descartada por el riesgo de generar un tir\'{o}n mec\'{a}nico sobre el conector antes de la separaci\'{o}n.
+
+\begin{longtable}{L{5cm} C{3cm} L{5.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro}&\color{white}\textbf{Valor}&\color{white}\textbf{Notas}\\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro}&\color{white}\textbf{Valor}&\color{white}\textbf{Notas}\\
+  \endhead
+  \rowcolor{tlvgray}
+  Tipo de conector          & ZRF (Zero Retention Force) & Separaci\'{o}n sin fuerza \\
+  Se\~{n}ales transportadas & Actuadores, RTD tobera, alimentaci\'{o}n auxiliar & M\'{i}n.\ 12 pines \\
+  \rowcolor{tlvgray}
+  Ubicaci\'{o}n             & Centro del plano de junta nariz-fuselaje & Eje axial \\
+  Estado post-eyecci\'{o}n  & Mitad nariz ciega / fuselaje sellada & Protecci\'{o}n contra gases \\
+\end{longtable}
+
+\section{Sistema de Recuperaci\'{o}n de la Nariz}
+
+\begin{longtable}{C{1cm} L{4cm} L{8.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Paso}&\color{white}\textbf{Evento}&\color{white}\textbf{Descripci\'{o}n}\\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Paso}&\color{white}\textbf{Evento}&\color{white}\textbf{Descripci\'{o}n}\\
+  \endhead
+  \rowcolor{tlvgray}
+  R-1 & Apogeo detectado       & IMU detecta velocidad vertical = 0. AFCC inicia secuencia. \\
+  R-2 & Disparo pirot\'{e}cnico & AFCC activa 6 capacitores simult\'{a}neamente. Shear pins cizallados. \\
+  \rowcolor{tlvgray}
+  R-3 & Eyecci\'{o}n nariz      & Nariz se desplaza axialmente. Umbilical ZRF desconectado. \\
+  R-4 & Extracci\'{o}n parac\'{a}idas principal & Cable de extracci\'{o}n en tensi\'{o}n. Parac\'{a}idas principal desplegado. \\
+  \rowcolor{tlvgray}
+  R-5 & Parac\'{a}idas secundario & Inercia de la nariz despliega su propio parac\'{a}idas. \\
+  R-6 & Descenso dual           & Cohete desciende con parac\'{a}idas principal. Nariz por separado. \\
+  \rowcolor{tlvgray}
+  R-7 & Aterrizaje nariz        & Plataforma de avi\'{o}nica protegida por amortiguadores. Hardware intacto. \\
+  R-8 & Recuperaci\'{o}n        & Ambos objetos recuperados. Plataforma extra\'{i}da y verificada en banco. \\
+\end{longtable}
+
+\section{Resumen de Arquitectura}
+
+\begin{longtable}{L{5.5cm} L{8cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Decisi\'{o}n}&\color{white}\textbf{Adoptado}\\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Decisi\'{o}n}&\color{white}\textbf{Adoptado}\\
+  \endhead
+  \rowcolor{tlvgray}
+  Ubicaci\'{o}n avi\'{o}nica      & Plataforma modular en nariz eyectable \\
+  Protecci\'{o}n mec\'{a}nica     & 4 silentblocks + parac\'{a}idas secundario de nariz \\
+  \rowcolor{tlvgray}
+  Protecci\'{o}n t\'{e}rmica      & Nariz es la zona m\'{a}s fr\'{i}a del veh\'{i}culo \\
+  Modularidad                      & Plataforma extra\'{i}ble por tapa desmontable \\
+  \rowcolor{tlvgray}
+  FADS                             & Operativo hasta apogeo; compatible con eyecci\'{o}n \\
+  Umbilical                        & Conector ZRF; separaci\'{o}n sin fuerza \\
+  \rowcolor{tlvgray}
+  N\'{u}cleo de c\'{o}mputo       & RISC-V (AFCC); C++ cr\'{i}tico, Python 3 no cr\'{i}tico \\
+  Control                          & PID / Ziegler-Nichols \\
+  \rowcolor{tlvgray}
+  Telemetr\'{i}a                   & H.264, $\geq$50 Mbps, latencia $\leq$30 ms \\
+  Recuperaci\'{o}n nariz           & Vessel aut\'{o}nomo + parac\'{a}idas secundario + drogue \\
+\end{longtable}
+
+\section{Elementos Pendientes}
+
+\begin{longtable}{C{1cm} L{8cm} C{2.2cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID}&\color{white}\textbf{Descripci\'{o}n}&\color{white}\textbf{Prioridad}\\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID}&\color{white}\textbf{Descripci\'{o}n}&\color{white}\textbf{Prioridad}\\
+  \endhead
+  \rowcolor{tlvgray}
+  P-01 & BOM completo de la plataforma para calcular masa real y altura del stack. & \textcolor{tlvred}{\textbf{Alta}} \\
+  P-02 & Seleccionar silentblocks: frecuencia de atenuaci\'{o}n vs.\ espectro de vibraci\'{o}n del motor APCP. & \textcolor{tlvred}{\textbf{Alta}} \\
+  \rowcolor{tlvgray}
+  P-03 & Dimensionar bater\'{i}a: energ\'{i}a requerida para misi\'{o}n completa incluyendo 6 capacitores de disparo. & \textcolor{tlvred}{\textbf{Alta}} \\
+  P-04 & Especificar conector ZRF: n\'{u}mero de pines, rating de corriente, compatibilidad con vuelo. & \textcolor{tlvorange}{\textbf{Media}} \\
+  \rowcolor{tlvgray}
+  P-05 & Dise\~{n}ar manifold FADS: distribuci\'{o}n interna de los 4 canales Pitot hasta los sensores. & \textcolor{tlvorange}{\textbf{Media}} \\
+  P-06 & Verificar que el parac\'{a}idas secundario cabe en el volumen c\'{o}nico con la plataforma dimensionada. & \textcolor{tlvorange}{\textbf{Media}} \\
+  \rowcolor{tlvgray}
+  P-07 & Protocolo de verificaci\'{o}n de plataforma en banco antes de cada integraci\'{o}n. & \textbf{Baja} \\
+\end{longtable}
+
+\end{document}

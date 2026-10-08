@@ -1,0 +1,26 @@
+{
+    "folders": [
+        {
+            "path": "../Proyectos/Proyectos VSC/LASU/.github"
+        },
+        {
+            "path": "../Proyectos/Proyectos VSC/LASU/calculadora-cientifica"
+        },
+        {
+            "path": "../Proyectos/Proyectos VSC/LASU/LASU"
+        },
+        {
+            "path": "../Proyectos/Proyectos VSC/LASU/LRL"
+        },
+        {
+            "path": "../Proyectos/Proyectos VSC/LASU/webhost"
+        },
+        {
+            "path": "../Proyectos/Proyectos VSC/LASU/wiki"
+        }
+    ],
+    "settings": {
+        "liveServer.settings.multiRootWorkspaceName": ".github",
+        "liveServer.settings.port": 5501
+    }
+}
