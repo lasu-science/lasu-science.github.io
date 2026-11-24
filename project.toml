@@ -1,0 +1,10 @@
+title = "tutorial-project"
+default_file = "main.kcl"
+
+[settings.app]
+[settings.meta]
+id = "a92b1375-0dbf-4bc2-9d46-f62f510da67f"
+
+[settings.modeling]
+[zookeeper."zoo.dev"]
+conversation_ids = [ "93be47e9-a090-486d-8aea-052753588d62" ]
