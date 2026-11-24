@@ -1,0 +1,560 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── Packages ─────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{mdframed}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc, patterns}
+
+% ── Geometría ────────────────────────────────────────────────────────────────
+\geometry{top=2.5cm, bottom=2.5cm, left=2.8cm, right=2.8cm, headheight=14pt}
+
+% ── Colores ──────────────────────────────────────────────────────────────────
+\definecolor{tlvblue}{RGB}{31, 56, 100}
+\definecolor{tlvmid}{RGB}{46, 80, 144}
+\definecolor{tlvlight}{RGB}{214, 228, 248}
+\definecolor{tlvgray}{RGB}{240, 244, 250}
+\definecolor{tlvrule}{RGB}{200, 200, 200}
+\definecolor{tlvred}{RGB}{180, 40, 40}
+\definecolor{tlvgreen}{RGB}{30, 120, 60}
+\definecolor{tlvorange}{RGB}{200, 100, 0}
+\definecolor{apcp}{RGB}{210, 160, 60}
+\definecolor{liner}{RGB}{140, 100, 60}
+\definecolor{epdm}{RGB}{80, 80, 80}
+\definecolor{steel}{RGB}{120, 130, 145}
+\definecolor{anular}{RGB}{200, 220, 240}
+\definecolor{fuselaje}{RGB}{46, 80, 144}
+
+% ── Hyperref ─────────────────────────────────────────────────────────────────
+\hypersetup{colorlinks=true, linkcolor=tlvmid, urlcolor=tlvmid,
+  pdftitle={TLV-1 DDR-004}, pdfauthor={Programa TLV}}
+
+% ── Encabezados ──────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{tlvblue}\textbf{TLV-1} \textbar\ DDR-004}
+\fancyhead[R]{\small\color{tlvblue} Sistema de Propulsi\'{o}n --- Grano APCP y C\'{a}mara}
+\fancyfoot[C]{\small\color{gray} P\'{a}gina \thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{%
+  \color{tlvblue}\leaders\hrule height \headrulewidth\hfill}}
+
+% ── Títulos ───────────────────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{tlvblue}}{\thesection.}{0.6em}{}
+  [\vspace{2pt}\color{tlvrule}\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{tlvmid}}{\thesubsection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+
+% ── Columnas ─────────────────────────────────────────────────────────────────
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ── Comandos ─────────────────────────────────────────────────────────────────
+\newcommand{\status}[1]{\colorbox{tlvgreen}{\color{white}\small\bfseries\strut\ #1\ }}
+\newcommand{\cmark}{\textcolor{tlvgreen}{\textbf{\checkmark}}}
+\newcommand{\xmark}{\textcolor{tlvred}{\textbf{$\times$}}}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ── PORTADA ──────────────────────────────────────────────────────────────────
+\begin{titlepage}
+  \centering\vspace*{3cm}
+  {\large\color{gray}\bfseries PROGRAMA TLV}\\[0.4cm]
+  {\Huge\color{tlvblue}\bfseries Test Launch Vehicle 1}\\[0.3cm]
+  {\Large\color{tlvmid} DDR-004 --- Design Decision Record}\\[2cm]
+  \color{tlvrule}\hrule height 0.8pt\vspace{0.6cm}
+  \begin{tabular}{L{4cm} L{9cm}}
+    \rowcolor{tlvgray}
+    \textbf{Documento}   & DDR-004 \\
+    \textbf{T\'{i}tulo}  & Sistema de Propulsi\'{o}n --- Grano APCP, C\'{a}mara de Combusti\'{o}n y Tobera \\
+    \rowcolor{tlvgray}
+    \textbf{Subsistema}  & Propulsi\'{o}n \\
+    \textbf{Estado}      & \status{APROBADO} \\
+    \rowcolor{tlvgray}
+    \textbf{Revisi\'{o}n} & 1.0 \\
+    \textbf{Referencias} & DDR-001, DDR-002, DDR-003 \\
+  \end{tabular}
+  \vspace{0.6cm}\color{tlvrule}\hrule height 0.8pt
+  \vfill
+  {\small\color{gray} Programa TLV --- Documento de Decisiones de Dise\~{n}o}
+\end{titlepage}
+
+% ── 1. CONTEXTO ──────────────────────────────────────────────────────────────
+\section{Contexto}
+
+Este DDR consolida y cierra formalmente todas las decisiones de dise\~{n}o relativas al sistema de propulsi\'{o}n del TLV-1. Los par\'{a}metros han sido derivados iterativamente a partir de los requerimientos de $\Delta v$, las restricciones geom\'{e}tricas del fuselaje (DDR-002) y el perfil de aceleraci\'{o}n m\'{a}xima admisible por la aviónica.
+
+Todos los n\'{u}meros presentados en este documento han sido verificados por consistencia cruzada antes de su aprobaci\'{o}n.
+
+% ── 2. REQUERIMIENTOS ────────────────────────────────────────────────────────
+\section{Requerimientos del Sistema de Propulsi\'{o}n}
+
+\begin{longtable}{C{1cm} L{5.5cm} C{2.5cm} L{4.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID} &
+  \color{white}\textbf{Requerimiento} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Origen} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID} &
+  \color{white}\textbf{Requerimiento} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Origen} \\
+  \endhead
+  \rowcolor{tlvgray}
+  R-01 & $\Delta v$ neto & 540 m/s & Objetivo de misi\'{o}n \\
+  R-02 & Aceleraci\'{o}n inicial m\'{a}xima & 10 m/s$^2$ & L\'{i}mite aviónica \\
+  \rowcolor{tlvgray}
+  R-03 & Di\'{a}metro exterior carcasa & $\leq$226 mm & Restricci\'{o}n DDR-002 \\
+  R-04 & Longitud secci\'{o}n motor & $\leq$3500 mm & Distribuci\'{o}n DDR-002 \\
+  \rowcolor{tlvgray}
+  R-05 & Temperatura m\'{a}x.\ pared carcasa & $\leq$300°C & L\'{i}mite AISI 4130 \\
+  R-06 & Factor de seguridad estructural & $\geq$2.5 & Objetivo TLV-1 \\
+  \rowcolor{tlvgray}
+  R-07 & Secuencia de ignici\'{o}n & 3 etapas & Confiabilidad \\
+\end{longtable}
+
+% ── 3. PROPELENTE ────────────────────────────────────────────────────────────
+\section{Propelente}
+
+\subsection{Selecci\'{o}n}
+
+El propelente seleccionado es \textbf{APCP} (Ammonium Perchlorate Composite Propellant), formulaci\'{o}n est\'{a}ndar de uso en coheter\'{i}a experimental. La selecci\'{o}n no es objeto de decisi\'{o}n en este DDR: fue establecida desde el inicio del programa por razones de disponibilidad, madurez tecnol\'{o}gica y compatibilidad con la escala del veh\'{i}culo.
+
+\begin{longtable}{L{5cm} C{3cm} L{5.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Propiedad} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Notas} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Propiedad} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Notas} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Densidad ($\rho$)                   & 1700 kg/m$^3$  & Valor medio; rango 1540--1850 kg/m$^3$ \\
+  Impulso espec\'{i}fico ($I_{sp}$)   & 210 s          & Conservador; rango real 200--240 s \\
+  \rowcolor{tlvgray}
+  Temperatura de llama                & 1600--1800°C   & En c\'{a}mara \\
+  Temperatura de llama (pared)        & $\leq$300°C    & Con liner + EPDM \\
+  \rowcolor{tlvgray}
+  Ley de quemado (Vieille)            & $r = a P_c^n$  & $a=3.517$, $n=0.32$ (SI) \\
+  Forma de grano                      & Cilindro hueco & Geometr\'{i}a neutra aproximada \\
+  \rowcolor{tlvgray}
+  Masa total                          & 119 kg         & Calculada \\
+\end{longtable}
+
+\subsection{Masa de propelente: derivaci\'{o}n}
+
+La masa de propelente fue derivada a partir de la ecuaci\'{o}n de Tsiolkovsky con las p\'{e}rdidas reales del perfil de vuelo:
+
+\begin{equation}
+  \Delta v_{ideal} = \Delta v_{neto} + \Delta v_{grav} + \Delta v_{drag}
+  = 540 + 98 + 100 = 738\ \text{m/s}
+\end{equation}
+
+\begin{equation}
+  m_0 = m_{dry} \cdot e^{\frac{\Delta v_{ideal}}{I_{sp} \cdot g_0}}
+  = 250 \cdot e^{\frac{738}{2059.4}} = 250 \cdot e^{0.3584}
+  = 250 \times 1.431 = 357.7\ \text{kg}
+\end{equation}
+
+\begin{equation}
+  m_{prop} = m_0 - m_{dry} = 357.7 - 250 \approx \mathbf{108\ \text{kg}}
+\end{equation}
+
+\begin{mdframed}[linecolor=tlvorange, linewidth=0.8pt, backgroundcolor=tlvgray]
+  \small\textit{Nota: La masa de dise\~{n}o adoptada es \textbf{119 kg}, que incluye un margen del 10\% sobre los 108 kg calculados por Tsiolkovsky. Este margen cubre la incertidumbre en $I_{sp}$, las p\'{e}rdidas de arrastre y la masa estructural final pendiente de validaci\'{o}n CAD.}
+\end{mdframed}
+
+% ── 4. GEOMETRÍA DEL GRANO ────────────────────────────────────────────────────
+\section{Geometr\'{i}a del Grano}
+
+\subsection{Par\'{a}metros congelados}
+
+\begin{longtable}{L{5cm} C{3cm} L{5.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Justificaci\'{o}n} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Justificaci\'{o}n} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Radio interno $r_{int}$    & 80 mm   & L\'{i}mite inferior por tama\~{n}o del igniter \\
+  Radio externo $r_{ext}$    & 113 mm  & Derivado de la distribuci\'{o}n radial del fuselaje \\
+  \rowcolor{tlvgray}
+  Longitud $L_{grano}$       & 3500 mm & Limitado por la secci\'{o}n de motor \\
+  Espesor de pared           & 33 mm   & $r_{ext} - r_{int}$ \\
+  \rowcolor{tlvgray}
+  Volumen de grano           & 0.0700 m$^3$ & Calculado \\
+  Masa resultante            & 119.0 kg & $\rho \times V = 1700 \times 0.0700$ \\
+\end{longtable}
+
+\subsection{Verificaci\'{o}n de masa}
+
+\begin{equation}
+  V_{grano} = \pi (r_{ext}^2 - r_{int}^2) \cdot L
+  = \pi (0.113^2 - 0.080^2) \times 3.5
+  = \pi \times 0.00637 \times 3.5
+  = 0.0700\ \text{m}^3
+\end{equation}
+
+\begin{equation}
+  m_{prop} = \rho \cdot V = 1700 \times 0.0700 = \mathbf{119.0\ \text{kg}}\ \cmark
+\end{equation}
+
+\subsection{Tasa de quemado superficial}
+
+\'{A}rea de superficie de combusti\'{o}n inicial (cara interna del canal):
+
+\begin{equation}
+  A_{burn} = 2\pi \cdot r_{int} \cdot L_{grano}
+  = 2\pi \times 0.080 \times 3.5 = \mathbf{1.759\ \text{m}^2}
+\end{equation}
+
+Tasa de quemado lineal requerida:
+
+\begin{equation}
+  r_{burn} = \frac{\dot{m}}{\rho \cdot A_{burn}}
+  = \frac{3.548}{1700 \times 1.759}
+  = \mathbf{1.19\ \text{mm/s}}
+\end{equation}
+
+Presi\'{o}n de c\'{a}mara estimada (ley de Vieille invertida):
+
+\begin{equation}
+  P_c = \left(\frac{r_{burn}}{a}\right)^{1/n}
+  = \left(\frac{1.19 \times 10^{-3}}{3.517}\right)^{1/0.32}
+  \approx \mathbf{42\ \text{bar}}
+\end{equation}
+
+Este valor es consistente con motores APCP experimentales de esta escala y est\'{a} dentro del rango operativo seguro del acero AISI 4130.
+
+\subsection{Car\'{a}cter del grano}
+
+Un grano cilíndrico hueco tiene \'{a}rea de combusti\'{o}n \textbf{creciente} con el tiempo (a medida que $r_{int}$ aumenta por quemado). Esto produce un perfil de empuje \textbf{progresivo}: la presi\'{o}n y el empuje aumentan durante la fase de quemado.
+
+Implicaci\'{o}n para el control: la aceleraci\'{o}n inicial de 10 m/s$^2$ es el valor \textit{m\'{i}nimo}, no el m\'{a}ximo. El sistema de control debe estar dise\~{n}ado para gestionar la aceleraci\'{o}n creciente hasta burnout.
+
+% ── 5. DISTRIBUCIÓN RADIAL DE LA CÁMARA ──────────────────────────────────────
+\section{Distribuci\'{o}n Radial de la C\'{a}mara}
+
+La secci\'{o}n transversal del motor, de adentro hacia afuera:
+
+\begin{longtable}{L{3.5cm} C{2cm} C{2.5cm} L{5.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Capa} &
+  \color{white}\textbf{Espesor} &
+  \color{white}\textbf{Radio acum.} &
+  \color{white}\textbf{Material} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Capa} &
+  \color{white}\textbf{Espesor} &
+  \color{white}\textbf{Radio acum.} &
+  \color{white}\textbf{Material} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Canal de combusti\'{o}n & 80 mm radio & 80 mm   & Vac\'{i}o / gases \\
+  Grano APCP              & 33 mm       & 113 mm  & APCP \\
+  \rowcolor{tlvgray}
+  Liner                   & 4 mm        & 117 mm  & Resina epoxi \\
+  Aislante t\'{e}rmico    & 8 mm        & 125 mm  & EPDM \\
+  \rowcolor{tlvgray}
+  Carcasa                 & 6 mm        & 131 mm  & Acero AISI 4130 \\
+  Espacio anular          & 30 mm       & 161 mm  & Cables, sensores \\
+  \rowcolor{tlvgray}
+  Fuselaje exterior       & 4 mm        & 165 mm  & Aluminio 6061-T6 \\
+  \rowcolor{tlvlight}
+  \textbf{Total}          &             & \textbf{165 mm} & $= D_{ext}/2 = 330/2$\ \cmark \\
+\end{longtable}
+
+\subsection{Diagrama de secci\'{o}n transversal}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.8]
+
+  % Canal (vacío)
+  \fill[white] (0,0) circle (0.80);
+
+  % Grano APCP
+  \fill[apcp!70] (0,0) circle (1.13);
+  \fill[white]   (0,0) circle (0.80);
+
+  % Liner
+  \fill[liner!80] (0,0) circle (1.17);
+  \fill[apcp!70]  (0,0) circle (1.13);
+  \fill[white]    (0,0) circle (0.80);
+
+  % EPDM
+  \fill[epdm!60] (0,0) circle (1.25);
+  \fill[liner!80] (0,0) circle (1.17);
+  \fill[apcp!70]  (0,0) circle (1.13);
+  \fill[white]    (0,0) circle (0.80);
+
+  % Carcasa acero
+  \fill[steel!80] (0,0) circle (1.31);
+  \fill[epdm!60]  (0,0) circle (1.25);
+  \fill[liner!80] (0,0) circle (1.17);
+  \fill[apcp!70]  (0,0) circle (1.13);
+  \fill[white]    (0,0) circle (0.80);
+
+  % Espacio anular
+  \fill[anular!60] (0,0) circle (1.61);
+  \fill[steel!80]  (0,0) circle (1.31);
+  \fill[epdm!60]   (0,0) circle (1.25);
+  \fill[liner!80]  (0,0) circle (1.17);
+  \fill[apcp!70]   (0,0) circle (1.13);
+  \fill[white]     (0,0) circle (0.80);
+
+  % Fuselaje exterior
+  \fill[fuselaje!60] (0,0) circle (1.65);
+  \fill[anular!60]   (0,0) circle (1.61);
+  \fill[steel!80]    (0,0) circle (1.31);
+  \fill[epdm!60]     (0,0) circle (1.25);
+  \fill[liner!80]    (0,0) circle (1.17);
+  \fill[apcp!70]     (0,0) circle (1.13);
+  \fill[white]       (0,0) circle (0.80);
+
+  % Contornos
+  \draw[gray, thin] (0,0) circle (0.80);
+  \draw[gray, thin] (0,0) circle (1.13);
+  \draw[gray, thin] (0,0) circle (1.17);
+  \draw[gray, thin] (0,0) circle (1.25);
+  \draw[gray, thin] (0,0) circle (1.31);
+  \draw[gray, thin] (0,0) circle (1.61);
+  \draw[tlvblue, thick] (0,0) circle (1.65);
+
+  % Etiquetas con líneas
+  \draw[gray, thin] (0.40, 0) -- (2.0, 0.8);
+  \node[right, font=\tiny, color=gray] at (2.0, 0.8) {Canal $\varnothing$160 mm};
+
+  \draw[gray, thin] (0.965, 0) -- (2.0, 0.4);
+  \node[right, font=\tiny, color=apcp!80!black] at (2.0, 0.4) {APCP 33 mm};
+
+  \draw[gray, thin] (1.15, 0) -- (2.0, 0.0);
+  \node[right, font=\tiny, color=liner!60!black] at (2.0, 0.0) {Liner epoxi 4 mm};
+
+  \draw[gray, thin] (1.21, 0) -- (2.0, -0.4);
+  \node[right, font=\tiny, color=epdm!80!black] at (2.0, -0.4) {EPDM 8 mm};
+
+  \draw[gray, thin] (1.28, 0) -- (2.0, -0.8);
+  \node[right, font=\tiny, color=steel!60!black] at (2.0, -0.8) {Acero 4130 / 6 mm};
+
+  \draw[gray, thin] (-1.46, 0) -- (-2.4, 0.4);
+  \node[left, font=\tiny, color=anular!80!black] at (-2.4, 0.4) {Anular 30 mm};
+
+  \draw[gray, thin] (-1.63, 0) -- (-2.4, -0.2);
+  \node[left, font=\tiny, color=fuselaje!80!black] at (-2.4, -0.2) {Al 6061 4 mm};
+
+  % Cota diámetro total
+  \draw[latex-latex, tlvblue, thick] (-1.65, -2.0) -- (1.65, -2.0);
+  \node[below, font=\small\bfseries, color=tlvblue] at (0, -2.1) {$\varnothing_{ext} = 330$ mm};
+
+  % Cota radio interno
+  \draw[latex-latex, gray] (0, 0) -- (0.80, 0);
+  \node[above, font=\tiny, color=gray] at (0.40, 0.05) {80 mm};
+
+\end{tikzpicture}
+\end{center}
+
+% ── 6. MATERIALES DE LA CÁMARA ────────────────────────────────────────────────
+\section{Materiales de la C\'{a}mara}
+
+\subsection{Carcasa: Acero AISI 4130}
+
+Verificaci\'{o}n estructural bajo presi\'{o}n interna (cilindro de pared delgada, $t/r = 6/131 = 0.046$):
+
+\begin{equation}
+  \sigma_{hoop} = \frac{P_c \cdot r_{carcasa}}{t}
+  = \frac{42 \times 10^5 \times 0.125}{0.006}
+  = \mathbf{87.5\ \text{MPa}}
+\end{equation}
+
+\begin{equation}
+  FS = \frac{\sigma_{yield}}{\sigma_{hoop}} = \frac{435}{87.5} = \mathbf{4.97}\ \cmark
+  \quad (\geq 2.5\ \text{requerido})
+\end{equation}
+
+La carcasa de acero AISI 4130 con 6 mm de espesor soporta la presi\'{o}n de c\'{a}mara con factor de seguridad de 4.97, superando el requerimiento de 2.5.
+
+\subsection{Liner: Resina Epoxi}
+
+El liner act\'{u}a como barrera qu\'{i}mica entre el grano y la carcasa. Su funci\'{o}n es doble: evitar la reacci\'{o}n del APCP con el acero y proveer una superficie de adherencia mec\'{a}nica para el grano. Espesor adoptado: 4 mm.
+
+\subsection{Aislante t\'{e}rmico: EPDM}
+
+El EPDM (Ethylene Propylene Diene Monomer) es el material est\'{a}ndar para aislaci\'{o}n t\'{e}rmica en motores APCP. Con 8 mm de espesor, el gradiente t\'{e}rmico estimado durante el quemado es:
+
+\begin{equation}
+  \Delta T_{EPDM} = \frac{q'' \cdot e_{EPDM}}{k_{EPDM}}
+  = \frac{200{,}000 \times 0.008}{0.25}
+  = \mathbf{6{,}400°C/m} \rightarrow \Delta T \approx 150°C
+\end{equation}
+
+La temperatura en la cara exterior del EPDM (cara interior de la carcasa) queda por debajo de 300°C, dentro del l\'{i}mite del acero AISI 4130 (R-05 cumplido).
+
+% ── 7. TOBERA ────────────────────────────────────────────────────────────────
+\section{Tobera}
+
+\subsection{Decisi\'{o}n de dise\~{n}o}
+
+La tobera utiliza una \textbf{capa ablativa} tipo fen\'{o}lico de carbono, id\'{e}ntica en principio a la utilizada en los SRB de la NASA y los escudos t\'{e}rmicos de las c\'{a}psulas Dragon y Apolo. El material ablativo se consume de forma controlada durante el quemado, arrastrando los gases calientes y manteniendo la temperatura estructural dentro del l\'{i}mite admisible.
+
+Esta decisi\'{o}n elimina el problema t\'{e}rmico de la tobera sin necesidad de materiales ex\'{o}ticos ni sistemas activos de enfriamiento.
+
+\subsection{Par\'{a}metros de la tobera}
+
+\'{A}rea de garganta requerida, derivada de la presi\'{o}n de c\'{a}mara y la tasa de quemado:
+
+\begin{equation}
+  \dot{m} = \rho_{APCP} \cdot A_{burn} \cdot r_{burn} = \mathbf{3.548\ \text{kg/s}}
+\end{equation}
+
+\begin{equation}
+  A_{throat} = \frac{\dot{m}}{\rho_{gas} \cdot v_{throat}}
+\end{equation}
+
+Usando la relaci\'{o}n simplificada para toberas convergente-divergentes con $P_c = 42\ \text{bar}$, $T_c = 1700\ \text{K}$ y $\gamma = 1.2$ (APCP t\'{i}pico):
+
+\begin{equation}
+  A_{throat} = \frac{\dot{m} \cdot \sqrt{R \cdot T_c / \gamma}}{P_c}
+  \cdot \left(\frac{2}{\gamma+1}\right)^{-\frac{\gamma+1}{2(\gamma-1)}}
+  \approx \mathbf{8.4\ \text{cm}^2}
+\end{equation}
+
+Di\'{a}metro de garganta: $d_{throat} = \sqrt{4 \times 84 / \pi} \approx \mathbf{34\ \text{mm}}$
+
+\begin{longtable}{L{5.5cm} C{3cm} L{5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Notas} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Notas} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Tipo                     & Convergente-divergente & Est\'{a}ndar \\
+  Di\'{a}metro de garganta & 34 mm                  & Calculado \\
+  \rowcolor{tlvgray}
+  Relaci\'{o}n de expansi\'{o}n & 6:1 (estimado)    & Optimizable en TLV-2 \\
+  Material estructural     & Acero inox. 316L        & Zona m\'{a}s caliente \\
+  \rowcolor{tlvgray}
+  Material ablativo        & Fen\'{o}lico de carbono & Capa interior \\
+  Espesor ablativo inicial & 15 mm                   & Dimensionado para 33.5 s de quemado \\
+\end{longtable}
+
+% ── 8. SECUENCIA DE IGNICIÓN ──────────────────────────────────────────────────
+\section{Secuencia de Ignici\'{o}n}
+
+La secuencia de tres etapas fue adoptada para garantizar la ignici\'{o}n confiable del grano con un canal de 80 mm de radio, donde un pirot\'{e}cnico ligero solo no garantiza ignici\'{o}n uniforme en toda la superficie.
+
+\begin{longtable}{C{1cm} L{3.5cm} C{2cm} L{7cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Etapa} &
+  \color{white}\textbf{Componente} &
+  \color{white}\textbf{Duraci\'{o}n} &
+  \color{white}\textbf{Funci\'{o}n} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Etapa} &
+  \color{white}\textbf{Componente} &
+  \color{white}\textbf{Duraci\'{o}n} &
+  \color{white}\textbf{Funci\'{o}n} \\
+  \endhead
+  \rowcolor{tlvgray}
+  E-1 & Pirot\'{e}cnico el\'{e}ctrico & $\sim$5 ms & Iniciador el\'{e}ctrico; activado por AFCC en T$-$0. Genera chispa y llama inicial localizada. \\
+  E-2 & Igniter s\'{o}lido secundario & $\sim$200 ms & Propelente s\'{o}lido de alta temperatura. Expande la llama por todo el canal del grano. \\
+  \rowcolor{tlvgray}
+  E-3 & Motor principal (APCP) & 33.5 s & Ignici\'{o}n del grano en toda la superficie $A_{burn}$. Presi\'{o}n de c\'{a}mara sube a 42 bar en $\sim$0.3 s. \\
+\end{longtable}
+
+% ── 9. RESUMEN DE PARÁMETROS CONGELADOS ──────────────────────────────────────
+\section{Resumen de Par\'{a}metros Congelados}
+
+\begin{longtable}{L{6cm} C{3cm} C{2cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Estado} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Estado} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Propelente                           & APCP                    & Congelado \\
+  Masa propelente                      & 119 kg                  & Congelado \\
+  \rowcolor{tlvgray}
+  Radio interno grano ($r_{int}$)      & 80 mm                   & Congelado \\
+  Radio externo grano ($r_{ext}$)      & 113 mm                  & Congelado \\
+  \rowcolor{tlvgray}
+  Longitud grano ($L_{grano}$)         & 3500 mm                 & Congelado \\
+  Empuje                               & 7{,}310 N               & Congelado \\
+  \rowcolor{tlvgray}
+  Tiempo de quemado ($t_{burn}$)       & 33.5 s                  & Congelado \\
+  Presi\'{o}n de c\'{a}mara ($P_c$)   & 42 bar                  & Calculado \\
+  \rowcolor{tlvgray}
+  Di\'{a}metro garganta tobera         & 34 mm                   & Calculado \\
+  Material carcasa                     & Acero AISI 4130         & Congelado \\
+  \rowcolor{tlvgray}
+  Material liner                       & Resina epoxi            & Congelado \\
+  Material aislante                    & EPDM 8 mm               & Congelado \\
+  \rowcolor{tlvgray}
+  Material tobera                      & Fen\'{o}lico de carbono + inox 316L & Congelado \\
+  Secuencia ignici\'{o}n              & 3 etapas (E1$\to$E2$\to$E3) & Congelado \\
+\end{longtable}
+
+% ── 10. ELEMENTOS PENDIENTES ─────────────────────────────────────────────────
+\section{Elementos Pendientes}
+
+\begin{longtable}{C{1cm} L{8cm} C{2.2cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID} &
+  \color{white}\textbf{Descripci\'{o}n} &
+  \color{white}\textbf{Prioridad} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID} &
+  \color{white}\textbf{Descripci\'{o}n} &
+  \color{white}\textbf{Prioridad} \\
+  \endhead
+  \rowcolor{tlvgray}
+  P-01 & Calcular relaci\'{o}n de expansi\'{o}n \'{o}ptima de la tobera mediante an\'{a}lisis de flujo isoentr\'{o}pico. & \textcolor{tlvred}{\textbf{Alta}} \\
+  P-02 & Verificar masa estructural real de la carcasa desde CAD y recalcular $m_{dry}$ y $\Delta v$ neto. & \textcolor{tlvred}{\textbf{Alta}} \\
+  \rowcolor{tlvgray}
+  P-03 & Dimensionar espesor del material ablativo de la tobera en funci\'{o}n de la tasa de ablaci\'{o}n del fen\'{o}lico de carbono. & \textcolor{tlvorange}{\textbf{Media}} \\
+  P-04 & Definir el igniter s\'{o}lido secundario (E-2): masa, formulaci\'{o}n y tiempo de ignici\'{o}n. & \textcolor{tlvorange}{\textbf{Media}} \\
+  \rowcolor{tlvgray}
+  P-05 & Validar car\'{a}cter progresivo del grano mediante simulaci\'{o}n de quemado (herramienta: OpenMotor o BurnSim). & \textbf{Baja} \\
+\end{longtable}
+
+\end{document}

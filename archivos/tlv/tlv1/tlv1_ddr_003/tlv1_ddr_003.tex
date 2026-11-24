@@ -1,0 +1,566 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── Packages ─────────────────────────────────────────────────────────────────
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{mdframed}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usetikzlibrary{arrows.meta, positioning, calc, backgrounds, decorations.pathmorphing}
+
+% ── Geometría ────────────────────────────────────────────────────────────────
+\geometry{top=2.5cm, bottom=2.5cm, left=2.8cm, right=2.8cm, headheight=14pt}
+
+% ── Colores ──────────────────────────────────────────────────────────────────
+\definecolor{tlvblue}{RGB}{31, 56, 100}
+\definecolor{tlvmid}{RGB}{46, 80, 144}
+\definecolor{tlvlight}{RGB}{214, 228, 248}
+\definecolor{tlvgray}{RGB}{240, 244, 250}
+\definecolor{tlvrule}{RGB}{200, 200, 200}
+\definecolor{tlvred}{RGB}{180, 40, 40}
+\definecolor{tlvgreen}{RGB}{30, 120, 60}
+\definecolor{tlvorange}{RGB}{200, 100, 0}
+\definecolor{steelgray}{RGB}{120, 130, 145}
+\definecolor{zonered}{RGB}{255, 220, 220}
+\definecolor{zoneyellow}{RGB}{255, 243, 200}
+\definecolor{zonegreen}{RGB}{220, 245, 220}
+
+% ── Hyperref ─────────────────────────────────────────────────────────────────
+\hypersetup{colorlinks=true, linkcolor=tlvmid, urlcolor=tlvmid,
+  pdftitle={TLV-1 DDR-003}, pdfauthor={Programa TLV}}
+
+% ── Encabezados ──────────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{tlvblue}\textbf{TLV-1} \textbar\ DDR-003}
+\fancyhead[R]{\small\color{tlvblue} Plataforma de Lanzamiento y Erector Hidr\'{a}ulico}
+\fancyfoot[C]{\small\color{gray} P\'{a}gina \thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{tlvblue}\leaders\hrule height \headrulewidth\hfill}}
+
+% ── Títulos ───────────────────────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{tlvblue}}{\thesection.}{0.6em}{}
+  [\vspace{2pt}\color{tlvrule}\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{tlvmid}}{\thesubsection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+
+% ── Columnas ─────────────────────────────────────────────────────────────────
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% ── Comandos ─────────────────────────────────────────────────────────────────
+\newcommand{\status}[1]{\colorbox{tlvgreen}{\color{white}\small\bfseries\strut\ #1\ }}
+\newcommand{\cmark}{\textcolor{tlvgreen}{\textbf{\checkmark}}}
+\newcommand{\xmark}{\textcolor{tlvred}{\textbf{$\times$}}}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ── PORTADA ──────────────────────────────────────────────────────────────────
+\begin{titlepage}
+  \centering\vspace*{3cm}
+  {\large\color{gray}\bfseries PROGRAMA TLV}\\[0.4cm]
+  {\Huge\color{tlvblue}\bfseries Test Launch Vehicle 1}\\[0.3cm]
+  {\Large\color{tlvmid} DDR-003 --- Design Decision Record}\\[2cm]
+  \color{tlvrule}\hrule height 0.8pt\vspace{0.6cm}
+  \begin{tabular}{L{4cm} L{9cm}}
+    \rowcolor{tlvgray}
+    \textbf{Documento}  & DDR-003 \\
+    \textbf{T\'{i}tulo} & Plataforma de Lanzamiento, Erector Hidr\'{a}ulico y Zona NOTAM \\
+    \rowcolor{tlvgray}
+    \textbf{Subsistema} & Infraestructura de Tierra / Operaciones de Lanzamiento \\
+    \textbf{Estado}     & \status{APROBADO} \\
+    \rowcolor{tlvgray}
+    \textbf{Revisi\'{o}n} & 1.0 \\
+    \textbf{Referencias} & DDR-001 (Separaci\'{o}n Nariz), DDR-002 (Edificio AIT) \\
+  \end{tabular}
+  \vspace{0.6cm}\color{tlvrule}\hrule height 0.8pt
+  \vfill
+  {\small\color{gray} Programa TLV --- Documento de Decisiones de Dise\~{n}o}
+\end{titlepage}
+
+% ── 1. CONTEXTO ──────────────────────────────────────────────────────────────
+\section{Contexto}
+
+La plataforma de lanzamiento es la infraestructura f\'{i}sica desde la cual el TLV-1 es erigido y lanzado. Este DDR documenta tres decisiones interrelacionadas: la configuraci\'{o}n y dimensiones de la plataforma, el dise\~{n}o del erector hidr\'{a}ulico de pivote, y el radio de la zona de exclusi\'{o}n NOTAM derivado del an\'{a}lisis cin\'{e}tico de riesgo.
+
+Los par\'{a}metros de vuelo utilizados en este documento provienen de la simulaci\'{o}n num\'{e}rica del perfil de vuelo del TLV-1, integrada con paso $\Delta t = 0.1\ \text{s}$ incluyendo arrastre aerodin\'{a}mico variable con altitud.
+
+% ── 2. PARÁMETROS DE VUELO RELEVANTES ────────────────────────────────────────
+\section{Par\'{a}metros de Vuelo Relevantes}
+
+\begin{longtable}{L{5cm} C{3.5cm} L{5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Fuente} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Fuente} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Masa total al despegue ($m_0$)    & 369 kg          & Dise\~{n}o TLV-1 \\
+  Masa seca ($m_{dry}$)             & 250 kg          & Estimado (pendiente CAD) \\
+  \rowcolor{tlvgray}
+  Empuje                            & 7{,}310 N       & Calculado \\
+  TWR inicial                       & 2.02            & Calculado \\
+  \rowcolor{tlvgray}
+  Aceleraci\'{o}n inicial           & 10 m/s$^2$      & Requerimiento aviónica \\
+  Tiempo de quemado ($t_{burn}$)    & 33.5 s          & Calculado \\
+  \rowcolor{tlvgray}
+  Velocidad en burnout              & 364.4 m/s       & Simulaci\'{o}n num\'{e}rica \\
+  Altitud en burnout                & 6{,}248 m       & Simulaci\'{o}n num\'{e}rica \\
+  \rowcolor{tlvgray}
+  Tiempo a Mach 1                   & 29.2 s          & Simulaci\'{o}n num\'{e}rica \\
+  Altitud en Mach 1                 & 4{,}770 m       & Simulaci\'{o}n num\'{e}rica \\
+  \rowcolor{tlvgray}
+  Apogeo                           & 11{,}450 m      & Simulaci\'{o}n num\'{e}rica \\
+  Energ\'{i}a cin\'{e}tica m\'{a}x.\ (burnout) & $\approx$16.6 MJ & Simulaci\'{o}n num\'{e}rica \\
+\end{longtable}
+
+% ── 3. PLATAFORMA DE LANZAMIENTO ─────────────────────────────────────────────
+\section{Plataforma de Lanzamiento}
+
+\subsection{Filosofía de dise\~{n}o}
+
+La plataforma debe ser lo m\'{a}s ligera y compacta posible, coherente con la escala del veh\'{i}culo. No es necesaria una estructura masiva: el TLV-1 es un veh\'{i}culo de 369 kg con un empuje de 7{,}310 N y un tiempo de exposici\'{o}n al chorro muy breve antes del despegue.
+
+El chorro de la tobera impacta la plataforma durante aproximadamente 0.5 s antes de que el cohete se eleve suficientemente. Con una placa sacrificial reemplazable en la zona de impacto, la estructura principal no sufre da\~{n}o t\'{e}rmico significativo.
+
+\subsection{Especificaciones}
+
+\begin{longtable}{L{5cm} C{3.5cm} L{5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Justificaci\'{o}n} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Justificaci\'{o}n} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Dimensiones en planta      & $2.5\ \times\ 2.5$ m   & Huella m\'{i}nima para estabilidad del erector \\
+  Altura sobre el suelo      & 0.5--0.8 m             & Espacio para tobera y umbilicales \\
+  Material estructura        & Acero estructural S275  & Econom\'{i}a, soldabilidad, disponibilidad \\
+  \rowcolor{tlvgray}
+  Placa sacrificial          & Acero 8 mm, 0.5$\times$0.5 m & Zona de impacto del chorro; reemplazable \\
+  Carga de dise\~{n}o        & $\geq 5{,}000$ N        & Empuje + factor din\'{a}mico de erector \\
+  \rowcolor{tlvgray}
+  Anclaje al suelo           & 4 pernos de anclaje M24 & Retenci\'{o}n del cohete en cuenta regresiva \\
+  Conexiones umbilicales     & 2 puntos laterales      & Alimentaci\'{o}n el\'{e}ctrica + telemetr\'{i}a de tierra \\
+  \rowcolor{tlvgray}
+  Deflector de gases         & No requerido            & $\Delta T \approx 25°C$ en placa; v\'{e}ase \S4 \\
+\end{longtable}
+
+\subsection{Verificaci\'{o}n t\'{e}rmica: placa de impacto}
+
+El flujo de calor por convecci\'{o}n en la zona de impacto directo del chorro es:
+
+\begin{equation}
+  q'' \approx 2\ \text{MW/m}^2
+\end{equation}
+
+El aumento de temperatura en una placa de acero de 8 mm durante el tiempo de exposici\'{o}n estimado ($t_{exp} \approx 0.5\ \text{s}$):
+
+\begin{equation}
+  \Delta T = \frac{q'' \cdot t_{exp}}{\rho \cdot c_p \cdot e}
+  = \frac{2 \times 10^6 \times 0.5}{7850 \times 500 \times 0.008}
+  = \frac{10^6}{31{,}400} \approx \mathbf{32°C}
+\end{equation}
+
+La temperatura final de la placa ($\approx 52°C$ desde temperatura ambiente) est\'{a} muy por debajo del l\'{i}mite del acero estructural. El deflector queda descartado para TLV-1.
+
+\subsection{Esquema de la plataforma}
+
+\begin{center}
+\begin{tikzpicture}[scale=1.0]
+
+  % Base de la plataforma
+  \fill[steelgray!30] (-3.5, 0) rectangle (3.5, 0.6);
+  \draw[steelgray, thick] (-3.5, 0) rectangle (3.5, 0.6);
+  \node[font=\small, color=steelgray] at (0, 0.3) {Estructura acero S275};
+
+  % Patas
+  \foreach \x in {-3.0, 3.0} {
+    \fill[steelgray!50] (\x-0.15, -0.8) rectangle (\x+0.15, 0);
+    \draw[steelgray] (\x-0.15, -0.8) rectangle (\x+0.15, 0);
+  }
+
+  % Pernos de anclaje
+  \foreach \x in {-3.0, 3.0} {
+    \fill[tlvblue] (\x-0.08, -1.1) rectangle (\x+0.08, -0.8);
+    \draw[tlvblue, thick] (\x, -1.1) -- (\x, -1.4);
+  }
+  \node[font=\tiny, color=tlvblue] at (0, -1.25) {Pernos de anclaje M24};
+
+  % Placa sacrificial
+  \fill[tlvred!40] (-0.8, 0.6) rectangle (0.8, 0.72);
+  \draw[tlvred, thick] (-0.8, 0.6) rectangle (0.8, 0.72);
+  \node[font=\tiny, color=tlvred] at (2.2, 0.66) {Placa sacrificial 8 mm};
+  \draw[tlvred, thin, -latex] (1.5, 0.66) -- (0.85, 0.66);
+
+  % Pivote del erector
+  \fill[tlvblue] (-3.2, 0.6) circle (0.15);
+  \draw[tlvblue, thick] (-3.2, 0.6) circle (0.15);
+  \node[font=\tiny, color=tlvblue, align=center] at (-3.2, 1.1) {Pivote\\erector};
+
+  % Cohete (vertical, simplificado)
+  \fill[tlvmid!30] (-0.22, 0.72) rectangle (0.22, 5.72);
+  \draw[tlvmid, thick] (-0.22, 0.72) rectangle (0.22, 5.72);
+  % Nariz
+  \fill[tlvblue]
+    (-0.22, 5.72) -- (0, 6.22) -- (0.22, 5.72) -- cycle;
+  % Aletas esquem.
+  \fill[steelgray!60]
+    (-0.22, 0.72) -- (-0.7, 0.3) -- (-0.7, 0.72) -- cycle;
+  \fill[steelgray!60]
+    (0.22, 0.72) -- (0.7, 0.3) -- (0.7, 0.72) -- cycle;
+  \node[font=\tiny, color=tlvmid] at (1.2, 3.2) {TLV-1 (5 m)};
+
+  % Chorro de la tobera
+  \fill[tlvred!20]
+    (-0.15, 0.72) -- (-0.5, -0.1) -- (0, 0.1) -- (0.5, -0.1) -- (0.15, 0.72) -- cycle;
+  \draw[tlvred!60, thick, decorate, decoration={snake, amplitude=1pt, segment length=4pt}]
+    (0, 0.72) -- (0, -0.05);
+  \node[font=\tiny, color=tlvred] at (1.3, 0.2) {Chorro APCP};
+
+  % Umbilicales
+  \draw[tlvorange, thick, dashed] (0.22, 2.0) -- (1.5, 2.0) -- (1.5, -0.5);
+  \draw[tlvorange, thick, dashed] (-0.22, 1.5) -- (-1.5, 1.5) -- (-1.5, -0.5);
+  \node[font=\tiny, color=tlvorange] at (2.3, 1.5) {Umbilicales};
+
+  % Cotas
+  \draw[latex-latex, gray] (0.35, 0.72) -- (0.35, 5.72);
+  \node[font=\tiny, color=gray, rotate=90] at (0.65, 3.2) {5000 mm};
+
+  \draw[latex-latex, gray] (-3.5, -1.5) -- (3.5, -1.5);
+  \node[font=\tiny, color=gray] at (0, -1.75) {2500 mm};
+
+\end{tikzpicture}
+\end{center}
+
+% ── 4. ERECTOR HIDRÁULICO ─────────────────────────────────────────────────────
+\section{Erector Hidr\'{a}ulico de Pivote}
+
+\subsection{Concepto de dise\~{n}o}
+
+El erector es un sistema de pivote con un cilindro hidr\'{a}ulico de gas en la parte posterior del brazo. El cohete descansa sobre el brazo en orientaci\'{o}n horizontal, y el cilindro lo lleva a la vertical en un \'{u}nico movimiento continuo.
+
+El pivote se ubica en el \textbf{centro de masa del veh\'{i}culo cargado} ($\approx 2500\ \text{mm}$ desde la tobera). Esta decisi\'{o}n minimiza el momento gravitacional que debe vencer el cilindro, reduciendo la fuerza requerida y el tama\~{n}o del sistema hidr\'{a}ulico.
+
+\subsection{An\'{a}lisis de fuerzas}
+
+Con el pivote en el CG, el momento gravitacional neto es idealmente cero. En la pr\'{a}ctica, la incertidumbre en la posici\'{o}n del CG y la masa del propio brazo del erector generan un momento residual. Estimando un desfase m\'{a}ximo de $\Delta_{CG} = 200\ \text{mm}$ entre el pivote y el CG real:
+
+\begin{equation}
+  M_{residual} = m_0 \cdot g \cdot \Delta_{CG}
+  = 369 \times 9.81 \times 0.20 = \mathbf{724\ \text{N·m}}
+\end{equation}
+
+El cilindro hidr\'{a}ulico opera con el brazo de momento $d_{cil}$ desde el pivote. Con el cilindro ubicado a $d_{cil} = 1500\ \text{mm}$ del pivote (extremo posterior del brazo):
+
+\begin{equation}
+  F_{cil,min} = \frac{M_{residual}}{d_{cil} \cdot \sin\theta_{max}}
+  = \frac{724}{1.5 \times 1.0} = \mathbf{483\ \text{N}}
+\end{equation}
+
+Aplicando un factor de seguridad de 3.0 (considera inercia rotacional, fricci\'{o}n en el pivote y viento):
+
+\begin{equation}
+  F_{cil,dise\~{n}o} = 483 \times 3.0 = \mathbf{1{,}450\ \text{N}}
+\end{equation}
+
+Un cilindro de gas est\'{a}ndar de \textbf{40 mm de di\'{a}metro a 50 bar} entrega:
+
+\begin{equation}
+  F_{cil,real} = P \cdot \frac{\pi d^2}{4}
+  = 50 \times 10^5 \times \frac{\pi \times 0.04^2}{4}
+  = \mathbf{6{,}283\ \text{N}}
+\end{equation}
+
+Factor de seguridad efectivo: $6{,}283 / 483 = \mathbf{13.0}$, que provee margen m\'{a}s que suficiente para un cilindro de catálogo est\'{a}ndar.
+
+\subsection{Desplazamiento del CG durante el consumo de propelente}
+
+El CG del veh\'{i}culo se desplaza durante la misi\'{o}n a medida que se consume el propelente. Este dato es relevante para la estabilidad en la plataforma y para el dise\~{n}o del brazo del erector:
+
+\begin{equation}
+  \Delta_{CG} = \frac{m_{prop} \times L_{motor}/2}{m_0}
+  = \frac{119 \times 1{,}750}{369} \approx \mathbf{565\ \text{mm}}
+\end{equation}
+
+El CG se desplaza 565 mm hacia la nariz entre el estado lleno (despegue) y el estado vac\'{i}o (burnout). El erector opera con el veh\'{i}culo en estado lleno, por lo que el pivote debe dise\~{n}arse para la posici\'{o}n del CG lleno.
+
+\subsection{Especificaciones del erector}
+
+\begin{longtable}{L{5.5cm} C{3cm} L{5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Notas} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Par\'{a}metro} &
+  \color{white}\textbf{Valor} &
+  \color{white}\textbf{Notas} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Tipo                        & Pivote + cilindro de gas  & Simple efecto \\
+  Posici\'{o}n del pivote     & CG lleno ($\approx$2500 mm desde tobera) & Minimiza fuerza requerida \\
+  \rowcolor{tlvgray}
+  Brazo del erector           & 5200 mm                   & Longitud cohete + margen de apoyo \\
+  Di\'{a}metro cilindro       & 40 mm                     & Componente de cat\'{a}logo \\
+  \rowcolor{tlvgray}
+  Presi\'{o}n de trabajo      & 50 bar                    & Est\'{a}ndar industrial \\
+  Fuerza del cilindro         & 6{,}283 N                 & Factor seguridad efectivo 13.0 \\
+  \rowcolor{tlvgray}
+  Posici\'{o}n cilindro       & 1500 mm post-pivote       & Extremo posterior del brazo \\
+  Material del brazo          & Perfil HEB-100 acero S275 & Rigidez bajo carga distribuida \\
+  \rowcolor{tlvgray}
+  Velocidad de ereci\'{o}n    & Controlada, $\leq$5°/s    & V\'{a}lvula de estrangulamiento \\
+  Tiempo de ereci\'{o}n       & $\approx$18--20 s         & $90° / 5°/s$ \\
+\end{longtable}
+
+\subsection{Esquema del erector}
+
+\begin{center}
+\begin{tikzpicture}[scale=0.85]
+
+  % Suelo
+  \fill[gray!20] (-1, -0.3) rectangle (10, 0);
+  \draw[gray, thick] (-1, 0) -- (10, 0);
+  \node[font=\tiny, color=gray] at (9.5, -0.18) {Suelo};
+
+  % Plataforma base
+  \fill[steelgray!40] (3.5, 0) rectangle (6.5, 0.4);
+  \draw[steelgray, thick] (3.5, 0) rectangle (6.5, 0.4);
+
+  % Brazo del erector (posición inclinada ~45°, durante erección)
+  \draw[tlvblue, line width=4pt]
+    (5.0, 0.4) -- ++(45:5.3);
+  % Pivote
+  \fill[tlvred] (5.0, 0.4) circle (0.15);
+  \node[font=\tiny, color=tlvred] at (4.4, 0.55) {Pivote (CG)};
+
+  % Cohete sobre el brazo
+  \draw[tlvmid, line width=10pt, opacity=0.4]
+    (5.0, 0.4) -- ++(45:5.0);
+  \draw[tlvmid, line width=2pt]
+    (5.0, 0.4) -- ++(45:5.0);
+
+  % Nariz del cohete
+  \fill[tlvblue]
+    ($(5.0,0.4)+(45:5.0)$) circle (0.12);
+
+  % Cilindro hidráulico (posterior al pivote, ángulo ~20° desde horizontal)
+  \draw[tlvorange, line width=3pt]
+    (5.0, 0.4) -- ++(225:1.5)
+    node[midway, below, font=\tiny, color=tlvorange] {};
+  \draw[tlvorange, line width=3pt, dashed]
+    ($(5.0,0.4)+(225:1.5)$) -- ++(270:1.2);
+  \fill[tlvorange] ($(5.0,0.4)+(225:1.5)$) circle (0.12);
+  \node[font=\tiny, color=tlvorange, align=left] at (2.5, -0.8)
+    {Cilindro gas\\40mm / 50 bar};
+
+  % Estado vertical (fantasma)
+  \draw[tlvmid, line width=2pt, dashed, opacity=0.4]
+    (5.0, 0.4) -- (5.0, 5.4);
+  \draw[tlvblue, dashed, opacity=0.4]
+    (5.0, 5.4) -- (5.0, 5.9);
+
+  % Arco de erección
+  \draw[gray, thin, -latex]
+    ($(5.0,0.4)+(45:2.5)$) arc (45:88:2.5);
+  \node[font=\tiny, color=gray] at (6.8, 2.8) {90°};
+
+  % Cotas
+  \draw[latex-latex, gray, thin]
+    (5.0, -0.6) -- ++(45:1.5);
+  \node[font=\tiny, color=gray] at (6.0, -0.3) {$d_{cil}=1500$ mm};
+
+\end{tikzpicture}
+\end{center}
+
+% ── 5. ANÁLISIS DE RIESGO CINÉTICO Y ZONA NOTAM ──────────────────────────────
+\section{An\'{a}lisis de Riesgo Cin\'{e}tico y Zona NOTAM}
+
+\subsection{Escenario de peor caso}
+
+El escenario que define el radio m\'{a}ximo de la zona de exclusi\'{o}n es el \textbf{fallo total en el instante de burnout}: FTS no activa, control de vuelo perdido, cohete a $v = 364.4\ \text{m/s}$ a $h = 6{,}248\ \text{m}$ con trayectoria horizontal.
+
+\subsection{Energ\'{i}a cin\'{e}tica m\'{a}xima}
+
+\begin{equation}
+  E_{k,max} = \frac{1}{2} m_{dry} \cdot v_{burnout}^2
+  = \frac{1}{2} \times 250 \times 364.4^2
+  = \mathbf{16{,}597\ \text{kJ} \approx 16.6\ \text{MJ}}
+\end{equation}
+
+Equivalente en TNT: $16.6 / 4.184 \approx \mathbf{3.97\ \text{kg TNT}}$
+
+\subsection{Alcance m\'{a}ximo en trayectoria balística}
+
+Tiempo de ca\'{i}da libre desde $h_{burnout} = 6{,}248\ \text{m}$:
+
+\begin{equation}
+  t_{impacto} = \sqrt{\frac{2 \cdot h_{burnout}}{g}} = \sqrt{\frac{2 \times 6{,}248}{9.81}} = \mathbf{35.7\ \text{s}}
+\end{equation}
+
+Alcance horizontal sin arrastre (cota superior conservadora):
+
+\begin{equation}
+  x_{max} = v_{burnout} \cdot t_{impacto} = 364.4 \times 35.7 = \mathbf{13{,}005\ \text{m}}
+\end{equation}
+
+Alcance con arrastre aerodin\'{a}mico ($C_D = 0.35$, factor 0.65):
+
+\begin{equation}
+  x_{drag} = 0.65 \times 13{,}005 = \mathbf{8{,}453\ \text{m}}
+\end{equation}
+
+Alcance con empuje residual del motor (factor 1.20 sobre $x_{drag}$):
+
+\begin{equation}
+  x_{thrust} = 1.20 \times 8{,}453 = \mathbf{10{,}144\ \text{m}}
+\end{equation}
+
+\subsection{Radio NOTAM adoptado}
+
+\begin{longtable}{L{6cm} C{2.5cm} C{2.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Escenario} &
+  \color{white}\textbf{Alcance (m)} &
+  \color{white}\textbf{Cubierto por NOTAM} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Escenario} &
+  \color{white}\textbf{Alcance (m)} &
+  \color{white}\textbf{Cubierto por NOTAM} \\
+  \endhead
+  \rowcolor{tlvgray}
+  Trayectoria balística sin arrastre & 13{,}005 & \cmark \\
+  Trayectoria balística con arrastre & 8{,}453  & \cmark \\
+  \rowcolor{tlvgray}
+  Con empuje residual (peor caso)    & 10{,}144 & \cmark \\
+  \rowcolor{tlvlight}
+  \textbf{Radio NOTAM adoptado}      & \textbf{11{,}000} & \textbf{\cmark\ con margen} \\
+\end{longtable}
+
+El radio de \textbf{11 km} cubre todos los escenarios con un margen de $\approx$8.4\% sobre el peor caso absoluto (trayectoria sin arrastre). La zona es una circunferencia conc\'{e}ntrica en la plataforma de lanzamiento.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.42]
+  \def\Rnotam{11}
+  \def\Rthrust{10.144}
+  \def\Rdrag{8.453}
+  \def\Rnoatm{13.005}
+
+  % Fondo
+  \fill[tlvgray!30] (0,0) circle (\Rnotam);
+
+  % Círculos
+  \draw[gray!50, dashed, thick] (0,0) circle (\Rnoatm);
+  \draw[tlvorange, thick] (0,0) circle (\Rdrag);
+  \draw[tlvred, thick] (0,0) circle (\Rthrust);
+  \draw[tlvblue, very thick] (0,0) circle (\Rnotam);
+
+  % Plataforma
+  \fill[tlvred] (0,0) circle (0.25);
+  \node[font=\small\bfseries, color=tlvred] at (0, -0.7) {Plataforma};
+
+  % Etiquetas
+  \node[font=\small, color=gray!70] at (0, \Rnoatm+0.6)
+    {Sin arrastre 13.0 km};
+  \node[font=\small, color=tlvorange] at (0, \Rdrag+0.6)
+    {Con arrastre 8.5 km};
+  \node[font=\small, color=tlvred] at (0, -\Rthrust-0.6)
+    {Empuje residual 10.1 km};
+  \node[font=\small\bfseries, color=tlvblue] at (0, -\Rnotam-0.7)
+    {NOTAM 11 km};
+
+  % Cotas
+  \draw[latex-latex, gray] (0,0) -- (\Rnotam, 0);
+  \node[font=\small, color=gray] at (\Rnotam/2, 0.5) {11 km};
+
+\end{tikzpicture}
+\end{center}
+
+% ── 6. SECUENCIA DE OPERACIONES DE LANZAMIENTO ───────────────────────────────
+\section{Secuencia de Operaciones de Lanzamiento}
+
+\begin{longtable}{C{1.2cm} L{4cm} C{2cm} L{6.5cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Paso} &
+  \color{white}\textbf{Actividad} &
+  \color{white}\textbf{Tiempo} &
+  \color{white}\textbf{Notas} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{Paso} &
+  \color{white}\textbf{Actividad} &
+  \color{white}\textbf{Tiempo} &
+  \color{white}\textbf{Notas} \\
+  \endhead
+  \rowcolor{tlvgray}
+  L-01 & Traslado AIT $\rightarrow$ plataforma & T$-$4 h & Veh\'{i}culo horizontal sobre carro de transporte \\
+  L-02 & Acople al brazo del erector & T$-$3.5 h & Fijaci\'{o}n mec\'{a}nica al brazo en posici\'{o}n horizontal \\
+  \rowcolor{tlvgray}
+  L-03 & Ereci\'{o}n a la vertical & T$-$3 h & Cilindro hidr\'{a}ulico; velocidad $\leq 5°/s$ \\
+  L-04 & Fijaci\'{o}n a la plataforma & T$-$2.5 h & Pernos de retenci\'{o}n al riel de la plataforma \\
+  \rowcolor{tlvgray}
+  L-05 & Conexi\'{o}n umbilicales & T$-$2 h & Alimentaci\'{o}n el\'{e}ctrica y telemetr\'{i}a de tierra \\
+  L-06 & Verificaci\'{o}n final de sistemas & T$-$1 h & Check aviónica, FTS (pasador a\'{u}n insertado), telemetr\'{i}a \\
+  \rowcolor{tlvgray}
+  L-07 & Despeje de personal & T$-$15 min & Todo el personal fuera del radio de seguridad inmediato \\
+  L-08 & Retiro de pasador FTS & T$-$5 min & \'{U}nico operador autorizado; retiro y confirmaci\'{o}n verbal \\
+  \rowcolor{tlvgray}
+  L-09 & Desconexión umbilicales & T$-$10 s & Autom\'{a}tica por comando del AFCC \\
+  L-10 & Ignición & T$-$0 & Secuencia: pirot\'{e}cnico $\rightarrow$ igniter s\'{o}lido $\rightarrow$ motor principal \\
+\end{longtable}
+
+% ── 7. ELEMENTOS PENDIENTES ──────────────────────────────────────────────────
+\section{Elementos Pendientes}
+
+\begin{longtable}{C{1cm} L{8cm} C{2.2cm}}
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID} &
+  \color{white}\textbf{Descripci\'{o}n} &
+  \color{white}\textbf{Prioridad} \\
+  \endfirsthead
+  \rowcolor{tlvblue}
+  \color{white}\textbf{ID} &
+  \color{white}\textbf{Descripci\'{o}n} &
+  \color{white}\textbf{Prioridad} \\
+  \endhead
+  \rowcolor{tlvgray}
+  P-01 & Determinar posici\'{o}n exacta del CG lleno mediante modelado CAD; ajustar posici\'{o}n del pivote. & \textcolor{tlvred}{\textbf{Alta}} \\
+  P-02 & Dise\~{n}ar sistema de retenci\'{o}n del cohete en el brazo del erector durante el traslado y la ereci\'{o}n. & \textcolor{tlvred}{\textbf{Alta}} \\
+  \rowcolor{tlvgray}
+  P-03 & Dise\~{n}ar sistema de desconexión autom\'{a}tica de umbilicales en T$-$10 s. & \textcolor{tlvorange}{\textbf{Media}} \\
+  P-04 & Verificar normativa local para zona NOTAM de 11 km (autoridad de aviaci\'{o}n civil competente). & \textcolor{tlvorange}{\textbf{Media}} \\
+  \rowcolor{tlvgray}
+  P-05 & Especificar carro de transporte AIT $\rightarrow$ plataforma compatible con brazo del erector. & \textcolor{tlvorange}{\textbf{Media}} \\
+  P-06 & Validar posici\'{o}n del CG vac\'{i}o post-burnout para estabilidad en trayectoria. & \textbf{Baja} \\
+\end{longtable}
+
+\end{document}

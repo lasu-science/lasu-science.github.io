@@ -1,0 +1,69 @@
+{
+  ".github/workflows/codeql.yml": {
+    "mtime": 1786135202.498347,
+    "seen": 1795119396.6900618,
+    "ast_hash": "0c0f43a469dfd12ad5049e3ac7d78eff",
+    "semantic_hash": "0c0f43a469dfd12ad5049e3ac7d78eff"
+  },
+  ".vscode/settings.json": {
+    "mtime": 1786135202.4993465,
+    "seen": 1795119396.6903183,
+    "ast_hash": "5b2bc57f2f7af1399f9fc17c92c8e70b",
+    "semantic_hash": "5b2bc57f2f7af1399f9fc17c92c8e70b",
+    "ast_empty": true
+  },
+  "archivos/LRL/RED/cycle_selector.py": {
+    "mtime": 1792622754.573207,
+    "seen": 1795119396.6903222,
+    "ast_hash": "0c206054e34aea9d20ad8733129a99cb",
+    "semantic_hash": "0c206054e34aea9d20ad8733129a99cb"
+  },
+  "archivos/LRL/RED/get-pip.py": {
+    "mtime": 1792622754.5862415,
+    "seen": 1795119396.6905217,
+    "ast_hash": "b5b7af20463df9a9ebba5501212d0785",
+    "semantic_hash": "b5b7af20463df9a9ebba5501212d0785"
+  },
+  "archivos/LRL/RED/injector_model.py": {
+    "mtime": 1792622754.5862415,
+    "seen": 1795119396.6907072,
+    "ast_hash": "0a59b186486422f0ab820cf61e863abe",
+    "semantic_hash": "0a59b186486422f0ab820cf61e863abe"
+  },
+  "archivos/LRL/RED/main.py": {
+    "mtime": 1792622754.5872433,
+    "seen": 1795119396.690889,
+    "ast_hash": "bcd00efecb4c6cc610f9e5b87364f516",
+    "semantic_hash": "bcd00efecb4c6cc610f9e5b87364f516"
+  },
+  "archivos/LRL/RED/objective_function.py": {
+    "mtime": 1792622754.5872433,
+    "seen": 1795119396.691068,
+    "ast_hash": "3b277a074546aae6c03a0ad15d50c372",
+    "semantic_hash": "3b277a074546aae6c03a0ad15d50c372"
+  },
+  "archivos/LRL/RED/optimizer.py": {
+    "mtime": 1792622754.5882418,
+    "seen": 1795119396.6912618,
+    "ast_hash": "6504a202f0d01bd2aaed70473dfa170e",
+    "semantic_hash": "6504a202f0d01bd2aaed70473dfa170e"
+  },
+  "archivos/LRL/RED/propellants.py": {
+    "mtime": 1792622754.5882418,
+    "seen": 1795119396.6914392,
+    "ast_hash": "e62a1f8fd42cde188c265a336e9d0a04",
+    "semantic_hash": "e62a1f8fd42cde188c265a336e9d0a04"
+  },
+  "archivos/LRL/RED/thermodynamics.py": {
+    "mtime": 1792622754.5892425,
+    "seen": 1795119396.6916184,
+    "ast_hash": "a871153bdd78963c6b766d6f6878d21f",
+    "semantic_hash": "a871153bdd78963c6b766d6f6878d21f"
+  },
+  "archivos/outro/lasu-outro.mp4": {
+    "mtime": 1792622754.6612082,
+    "seen": 1795119396.6917968,
+    "ast_hash": "09e0da480754756a7fe87a9333bd2e55",
+    "semantic_hash": "09e0da480754756a7fe87a9333bd2e55"
+  }
+}

@@ -1,0 +1,255 @@
+\documentclass[11pt, a4paper]{article}
+
+% ── Paquetes ─────────────────────────────────────────────────────────────────
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{pifont}
+\usepackage[spanish]{babel}
+\usepackage{amsmath, amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{tabularx}
+\usepackage{multirow}
+
+% ── Colores ──────────────────────────────────────────────────────────────────
+\definecolor{tlvnavy}{RGB}{31, 56, 100}
+\definecolor{tlvblue}{RGB}{46, 80, 144}
+\definecolor{tlvlight}{RGB}{240, 244, 250}
+\definecolor{tlvgray}{RGB}{136, 136, 136}
+\definecolor{tlvgreen}{RGB}{0, 128, 0}
+\definecolor{tlvred}{RGB}{180, 0, 0}
+
+% ── Tipografía de secciones ───────────────────────────────────────────────────
+\titleformat{\section}{\large\bfseries\color{tlvnavy}}{}{0em}{\thesection\quad}[\vspace{-4pt}\rule{\linewidth}{0.4pt}]
+\titleformat{\subsection}{\normalsize\bfseries\color{tlvblue}}{}{0em}{\thesubsection\quad}
+\titlespacing*{\section}{0pt}{18pt}{8pt}
+\titlespacing*{\subsection}{0pt}{12pt}{4pt}
+
+% ── Encabezado y pie ─────────────────────────────────────────────────────────
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{tlvgray}\textbf{Programa TLV} \textbar\ TLV-1}
+\fancyhead[R]{\small\color{tlvgray}DDR-001 — Rev. 1.0}
+\fancyfoot[C]{\small\color{tlvgray}Página \thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+% ── Macros útiles ─────────────────────────────────────────────────────────────
+\newcommand{\yes}{\textcolor{tlvgreen}{\textbf{\ding{51}}}}
+\newcommand{\no}{\textcolor{tlvred}{\textbf{\ding{55}}}}
+\newcommand{\param}[2]{\texttt{#1} & #2 \\}
+
+% ── Hyperlinks ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks=true, linkcolor=tlvblue, urlcolor=tlvblue,
+  pdftitle={TLV-1 DDR-001}, pdfauthor={Programa TLV}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\begin{document}
+\thispagestyle{empty}
+
+% ── PORTADA ──────────────────────────────────────────────────────────────────
+\vspace*{3cm}
+\begin{center}
+  {\large\color{tlvgray}\textbf{PROGRAMA TLV}}\\[0.4cm]
+  {\Huge\color{tlvnavy}\textbf{Test Launch Vehicle 1}}\\[0.3cm]
+  {\Large\color{tlvblue}DDR-001 — Design Decision Record}\\[1.2cm]
+  \rule{0.6\linewidth}{1pt}\\[0.8cm]
+
+  \begin{tabular}{ll}
+    \toprule
+    \rowcolor{tlvnavy}
+    \color{white}\textbf{Campo} & \color{white}\textbf{Valor} \\
+    \midrule
+    \rowcolor{tlvlight} Documento     & DDR-001 \\
+    Título        & Sistema de Separación de Nariz — Shear Pins + Cartucho \\
+    \rowcolor{tlvlight} Subsistema    & Recuperación / Interfaz Nariz-Fuselaje \\
+    Estado        & \textcolor{tlvgreen}{\textbf{APROBADO}} \\
+    \rowcolor{tlvlight} Revisión      & 1.0 \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+\newpage
+
+% ── 1. CONTEXTO ──────────────────────────────────────────────────────────────
+\section{Contexto}
+
+El TLV-1 es el primer vehículo del Programa TLV, un programa de desarrollo incremental de cuatro vehículos suborbales. Su objetivo es validar la cadena de sistemas básica: propulsión APCP, aviónica RISC-V, telemetría y recuperación.
+
+El sistema de separación de la nariz cónica es un elemento crítico de la secuencia de recuperación. Su función es liberar la nariz en el apogeo para exponer el compartimento del paracaídas y permitir el despliegue controlado.
+
+% ── 2. PARÁMETROS ────────────────────────────────────────────────────────────
+\section{Parámetros de Diseño del Vehículo}
+
+Los siguientes parámetros están congelados para TLV-1 y son referenciados por este DDR:
+
+\vspace{6pt}
+\begin{tabularx}{\linewidth}{llX}
+  \toprule
+  \rowcolor{tlvnavy}
+  \color{white}\textbf{Parámetro} & \color{white}\textbf{Valor} & \color{white}\textbf{Notas} \\
+  \midrule
+  \rowcolor{tlvlight} Diámetro exterior fuselaje   & 330\,mm   & Congelado \\
+  Radio interior ($D_{ext}/2$)                     & 165\,mm   & Derivado \\
+  \rowcolor{tlvlight} Longitud total               & 5\,000\,mm & Congelado \\
+  Longitud nariz cónica                            & 600\,mm   & Congelado \\
+  \rowcolor{tlvlight} Grosor pared fuselaje exterior & 4\,mm   & Aluminio 6061-T6 \\
+  Grosor carcasa motor                             & 6\,mm     & Acero AISI 4130 \\
+  \rowcolor{tlvlight} Espesor liner epoxi          & 4\,mm     & Barrera química \\
+  Espesor aislante EPDM                            & 8\,mm     & Barrera térmica \\
+  \rowcolor{tlvlight} Espacio anular               & 30\,mm    & Cables y sensores \\
+  Masa propelente (APCP)                           & $\approx 119$\,kg & Calculado \\
+  \rowcolor{tlvlight} Masa estructural estimada    & $\approx 250$\,kg & Pendiente validación CAD \\
+  Masa total al despegue                           & $\approx 369$\,kg & Calculado \\
+  \rowcolor{tlvlight} Apogeo estimado              & $\approx 18$\,km  & Calculado \\
+  \bottomrule
+\end{tabularx}
+
+% ── 3. PROBLEMA ──────────────────────────────────────────────────────────────
+\section{Definición del Problema}
+
+Se necesita un sistema que satisfaga simultáneamente los siguientes requerimientos:
+
+\begin{enumerate}[leftmargin=*, itemsep=3pt]
+  \item Retenga la nariz de forma segura durante toda la fase de ascenso (cargas aerodinámicas + vibración del motor).
+  \item Se active en el apogeo para liberar la nariz y desplegar el paracaídas.
+  \item Sea económico, fabricable con medios propios y repetible entre misiones.
+  \item Sea compatible con los espesores de pared disponibles (constraint geométrico).
+\end{enumerate}
+
+% ── 4. ANÁLISIS ──────────────────────────────────────────────────────────────
+\section{Análisis de Fuerzas}
+
+\subsection{Fuerza de separación}
+
+La presión del sistema actúa sobre el área transversal interna de la nariz:
+
+\begin{equation}
+  F_{sep} = P \cdot \pi \cdot r^2
+\end{equation}
+
+Para $P = 4.8\,\text{bar} = 0.48\,\text{MPa}$ y $r = 0.165\,\text{m}$:
+
+\begin{equation}
+  F_{sep} = 0.48 \times 10^6 \times \pi \times 0.165^2 = \mathbf{40{,}900\,\text{N} \approx 40.9\,\text{kN}}
+\end{equation}
+
+\subsection{Constraint geométrico del pin}
+
+El elemento limitante es la carcasa del motor (6\,mm de espesor). Aplicando un margen estructural del 20\,\% para preservar la integridad alrededor del orificio:
+
+\begin{equation}
+  d_{pin} \leq 0.80 \times t_{carcasa} = 0.80 \times 6\,\text{mm} = 4.8\,\text{mm}
+  \quad \Rightarrow \quad \text{adoptado: } d_{pin} = 5.6\,\text{mm}
+\end{equation}
+
+\textit{Nota: Se adoptó 5.6\,mm como valor nominal redondeado a la serie de brocas estándar más cercana. Este valor debe verificarse contra el grosor final de fabricación.}
+
+\subsection{Fuerza de cizalla por pin}
+
+Material de pin: Aluminio 2024-T3, $\tau_{ult} = 280\,\text{MPa}$.
+
+\begin{equation}
+  F_{pin} = \tau_{ult} \cdot \frac{\pi \, d^2}{4}
+  = 280 \times \frac{\pi \times 5.6^2}{4}
+  = 280 \times 24.63\,\text{mm}^2
+  = \mathbf{6{,}896\,\text{N} \approx 6.9\,\text{kN}}
+\end{equation}
+
+\subsection{Número de pins requerido}
+
+Aplicando el factor de seguridad $FS \geq 2.5$ requerido por los objetivos del TLV-1:
+
+\begin{equation}
+  n = \frac{F_{sep} \cdot FS}{F_{pin}} = \frac{40{,}900 \times 2.5}{6{,}900} = 14.8
+\end{equation}
+
+Se adoptan \textbf{6 pins} con una presión de cartucho ligeramente superior (ver §5), porque:
+
+\begin{itemize}[leftmargin=*, itemsep=3pt]
+  \item Número par permite distribución simétrica a 60° entre pins, simplificando el maquinado.
+  \item 6 pins $\times$ 6.9\,kN $=$ 41.4\,kN de retención, correspondiente a $P_{sep} = 4.8\,\text{bar}$: rango de cartucho pirotécnico ligero comercialmente disponible.
+  \item Separación entre orificios resultante $\approx 173\,\text{mm}$, suficiente para evitar interferencia estructural.
+\end{itemize}
+
+\begin{equation}
+  \Delta s = \frac{\pi \cdot D_{ext}}{n} = \frac{\pi \times 330}{6} \approx \mathbf{173\,\text{mm}}
+\end{equation}
+
+% ── 5. ALTERNATIVAS ──────────────────────────────────────────────────────────
+\section{Alternativas Evaluadas}
+
+\vspace{6pt}
+\begin{tabularx}{\linewidth}{lXll}
+  \toprule
+  \rowcolor{tlvnavy}
+  \color{white}\textbf{Opción} & \color{white}\textbf{Descripción} & \color{white}\textbf{Presión} & \color{white}\textbf{Resultado} \\
+  \midrule
+  \rowcolor{tlvlight}
+  A1 & Pirotécnico estándar (15\,bar) + pins Ø2.5\,mm & 15\,bar & \no\ 93 pins. Inviable. \\
+  A2 & CO$_2$ 12\,g (1.1\,bar) + pins Ø2.5\,mm & 1.1\,bar & \no\ Pins fuera de constraint. \\
+  \rowcolor{tlvlight}
+  \textbf{A3} & \textbf{Pirotécnico ligero (4.8\,bar) + 6 pins Al\,2024-T3 Ø5.6\,mm} & \textbf{4.8\,bar} & \yes\ \textbf{Adoptada.} \\
+  A4 & CO$_2$ + válvula activa & $\approx$2\,bar & \no\ Mayor complejidad. \\
+  \bottomrule
+\end{tabularx}
+
+% ── 6. DECISIÓN ──────────────────────────────────────────────────────────────
+\section{Decisión Adoptada}
+
+\vspace{6pt}
+\begin{tabular}{ll}
+  \toprule
+  \rowcolor{tlvnavy}
+  \color{white}\textbf{Parámetro} & \color{white}\textbf{Valor adoptado} \\
+  \midrule
+  \rowcolor{tlvlight} Tipo de sistema        & Shear pins + cartucho pirotécnico ligero \\
+  Material del pin                           & Aluminio 2024-T3 \\
+  \rowcolor{tlvlight} Diámetro del pin       & 5.6\,mm \\
+  Número de pins                             & 6 (distribución simétrica, 60° entre pins) \\
+  \rowcolor{tlvlight} Separación entre pins  & $\approx 173$\,mm \\
+  Fuerza de retención total                  & 41.4\,kN \\
+  \rowcolor{tlvlight} Presión de separación  & 4.8\,bar \\
+  Factor de seguridad efectivo               & $\geq 2.5$ (cumple objetivo TLV-1) \\
+  \rowcolor{tlvlight} Secuencia de activación & Apogeo (IMU) $\rightarrow$ AFCC activa cartucho $\rightarrow$ pins ceden\\$\rightarrow$ nariz eyectada $\rightarrow$ paracaídas \\
+  \bottomrule
+\end{tabular}
+
+% ── 7. IMPACTO EN MODELADO ───────────────────────────────────────────────────
+\section{Impacto en Modelado FreeCAD}
+
+\begin{enumerate}[leftmargin=*, itemsep=4pt]
+  \item \texttt{Body\_Nariz}: agregar 6 orificios de Ø5.6\,mm a 60° en la cara inferior, profundidad igual al grosor de pared (4\,mm).
+  \item \texttt{Body\_Fuselaje}: agregar brida o coupler de interfaz con orificios alineados a los de la nariz.
+  \item \texttt{Body\_Carcasa}: verificar que los orificios de pin no comprometan la integridad de la carcasa en la zona de interfaz.
+  \item \texttt{Assembly\_TLV1}: aplicar constraints de coincidencia entre orificios de nariz y fuselaje para verificar alineación.
+\end{enumerate}
+
+% ── 8. PENDIENTES ────────────────────────────────────────────────────────────
+\section{Elementos Pendientes}
+
+\vspace{6pt}
+\begin{tabularx}{\linewidth}{lXl}
+  \toprule
+  \rowcolor{tlvnavy}
+  \color{white}\textbf{ID} & \color{white}\textbf{Pendiente} & \color{white}\textbf{Prioridad} \\
+  \midrule
+  \rowcolor{tlvlight} P-01 & Validar grosor final de carcasa (6\,mm nominal) y confirmar $d_{pin} = 5.6$\,mm. & Alta \\
+  P-02 & Seleccionar cartucho pirotécnico comercial con $P_{nom} = 4.8$\,bar. & Alta \\
+  \rowcolor{tlvlight} P-03 & Calcular masa estructural real desde CAD y refinar apogeo ($\approx 18$\,km). & Media \\
+  P-04 & Definir material final de la nariz cónica (afecta $\tau_{ult}$ en orificio del pin). & Media \\
+  \rowcolor{tlvlight} P-05 & Verificar carga de vibración del motor sobre pins durante ascenso (fatiga). & Baja \\
+  \bottomrule
+\end{tabularx}
+
+\end{document}
