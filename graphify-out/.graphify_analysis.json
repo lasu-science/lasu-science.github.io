@@ -1,0 +1,353 @@
+{
+  "communities": {
+    "0": [
+      "archivos_lrl_red_cycle_selector",
+      "archivos_lrl_red_cycle_selector_cycle_isp_efficiency",
+      "archivos_lrl_red_cycle_selector_enginecycle",
+      "archivos_lrl_red_cycle_selector_get_all_feasible_cycles",
+      "archivos_lrl_red_cycle_selector_is_cycle_feasible",
+      "archivos_lrl_red_cycle_selector_rationale_1",
+      "archivos_lrl_red_cycle_selector_rationale_113",
+      "archivos_lrl_red_cycle_selector_rationale_139",
+      "archivos_lrl_red_cycle_selector_rationale_183",
+      "archivos_lrl_red_cycle_selector_rationale_216",
+      "archivos_lrl_red_cycle_selector_rationale_226",
+      "archivos_lrl_red_cycle_selector_score_cycle",
+      "archivos_lrl_red_cycle_selector_select_cycle",
+      "archivos_lrl_red_optimizer",
+      "archivos_lrl_red_optimizer_evaluate_design",
+      "archivos_lrl_red_optimizer_optimise_for_cycle",
+      "archivos_lrl_red_optimizer_optimise_for_cycle_neg_score",
+      "archivos_lrl_red_optimizer_py_any",
+      "archivos_lrl_red_optimizer_rationale_1",
+      "archivos_lrl_red_optimizer_rationale_208",
+      "archivos_lrl_red_optimizer_rationale_268",
+      "archivos_lrl_red_optimizer_rationale_79",
+      "archivos_lrl_red_optimizer_run_optimisation",
+      "archivos_lrl_red_propellants_propellantcombination",
+      "archivos_lrl_red_propellants_rationale_62",
+      "archivos_lrl_red_thermodynamics_exit_area",
+      "archivos_lrl_red_thermodynamics_mass_flow_from_thrust",
+      "archivos_lrl_red_thermodynamics_rationale_156",
+      "archivos_lrl_red_thermodynamics_rationale_164",
+      "archivos_lrl_red_thermodynamics_rationale_282",
+      "archivos_lrl_red_thermodynamics_rationale_290",
+      "archivos_lrl_red_thermodynamics_split_mass_flow",
+      "archivos_lrl_red_thermodynamics_throat_area",
+      "warnings"
+    ],
+    "1": [
+      "archivos_lrl_red_propellants_propellantcombination_gamma",
+      "archivos_lrl_red_propellants_propellantcombination_m_mol",
+      "archivos_lrl_red_propellants_propellantcombination_t_c",
+      "archivos_lrl_red_propellants_rationale_101",
+      "archivos_lrl_red_propellants_rationale_105",
+      "archivos_lrl_red_propellants_rationale_109",
+      "archivos_lrl_red_thermodynamics",
+      "archivos_lrl_red_thermodynamics_area_mach_ratio",
+      "archivos_lrl_red_thermodynamics_characteristic_velocity",
+      "archivos_lrl_red_thermodynamics_compute_nozzle_state",
+      "archivos_lrl_red_thermodynamics_exit_diameter",
+      "archivos_lrl_red_thermodynamics_exit_pressure",
+      "archivos_lrl_red_thermodynamics_gamma_function",
+      "archivos_lrl_red_thermodynamics_isentropic_pressure_ratio",
+      "archivos_lrl_red_thermodynamics_mach_from_area_ratio_supersonic",
+      "archivos_lrl_red_thermodynamics_optimal_expansion_ratio",
+      "archivos_lrl_red_thermodynamics_optimal_expansion_ratio_residual",
+      "archivos_lrl_red_thermodynamics_pressure_correction_tc",
+      "archivos_lrl_red_thermodynamics_rationale_1",
+      "archivos_lrl_red_thermodynamics_rationale_110",
+      "archivos_lrl_red_thermodynamics_rationale_126",
+      "archivos_lrl_red_thermodynamics_rationale_169",
+      "archivos_lrl_red_thermodynamics_rationale_174",
+      "archivos_lrl_red_thermodynamics_rationale_185",
+      "archivos_lrl_red_thermodynamics_rationale_224",
+      "archivos_lrl_red_thermodynamics_rationale_39",
+      "archivos_lrl_red_thermodynamics_rationale_49",
+      "archivos_lrl_red_thermodynamics_rationale_61",
+      "archivos_lrl_red_thermodynamics_rationale_66",
+      "archivos_lrl_red_thermodynamics_rationale_78",
+      "archivos_lrl_red_thermodynamics_rationale_88",
+      "archivos_lrl_red_thermodynamics_throat_diameter",
+      "archivos_lrl_red_thermodynamics_thrust_coefficient",
+      "scipy_optimize"
+    ],
+    "2": [
+      "github_workflows_codeql",
+      "github_workflows_codeql_analyze_name",
+      "github_workflows_codeql_analyze_permissions",
+      "github_workflows_codeql_analyze_runs_on",
+      "github_workflows_codeql_analyze_strategy",
+      "github_workflows_codeql_include_build_mode",
+      "github_workflows_codeql_include_language",
+      "github_workflows_codeql_jobs",
+      "github_workflows_codeql_jobs_analyze",
+      "github_workflows_codeql_matrix_include",
+      "github_workflows_codeql_name",
+      "github_workflows_codeql_on",
+      "github_workflows_codeql_on_pull_request",
+      "github_workflows_codeql_on_push",
+      "github_workflows_codeql_on_schedule",
+      "github_workflows_codeql_permissions_actions",
+      "github_workflows_codeql_permissions_contents",
+      "github_workflows_codeql_permissions_id_token",
+      "github_workflows_codeql_permissions_packages",
+      "github_workflows_codeql_permissions_security_events",
+      "github_workflows_codeql_pull_request_branches",
+      "github_workflows_codeql_push_branches",
+      "github_workflows_codeql_schedule_cron",
+      "github_workflows_codeql_strategy_fail_fast",
+      "github_workflows_codeql_strategy_matrix"
+    ],
+    "3": [
+      "archivos_lrl_red_objective_function",
+      "archivos_lrl_red_objective_function_hard_constraint_penalty",
+      "archivos_lrl_red_objective_function_objective_score",
+      "archivos_lrl_red_objective_function_rationale_1",
+      "archivos_lrl_red_objective_function_rationale_105",
+      "archivos_lrl_red_objective_function_rationale_110",
+      "archivos_lrl_red_objective_function_rationale_123",
+      "archivos_lrl_red_objective_function_rationale_133",
+      "archivos_lrl_red_objective_function_rationale_157",
+      "archivos_lrl_red_objective_function_rationale_198",
+      "archivos_lrl_red_objective_function_rationale_250",
+      "archivos_lrl_red_objective_function_rationale_72",
+      "archivos_lrl_red_objective_function_rationale_82",
+      "archivos_lrl_red_objective_function_rationale_94",
+      "archivos_lrl_red_objective_function_score_breakdown",
+      "archivos_lrl_red_objective_function_score_chamber_pressure",
+      "archivos_lrl_red_objective_function_score_complexity",
+      "archivos_lrl_red_objective_function_score_dp_fraction",
+      "archivos_lrl_red_objective_function_score_expansion_ratio",
+      "archivos_lrl_red_objective_function_score_injector_count",
+      "archivos_lrl_red_objective_function_score_isp",
+      "archivos_lrl_red_objective_function_score_of_deviation",
+      "archivos_lrl_red_propellants_propellantcombination_validate_of",
+      "numpy"
+    ],
+    "4": [
+      "archivos_lrl_red_main",
+      "archivos_lrl_red_main_design_engine",
+      "archivos_lrl_red_main_print_report",
+      "archivos_lrl_red_main_py_any",
+      "archivos_lrl_red_main_rationale_1",
+      "archivos_lrl_red_main_rationale_153",
+      "archivos_lrl_red_main_rationale_243",
+      "archivos_lrl_red_main_rationale_79",
+      "archivos_lrl_red_main_run_demo",
+      "archivos_lrl_red_main_validate_inputs",
+      "archivos_lrl_red_propellants",
+      "archivos_lrl_red_propellants_get_propellant",
+      "archivos_lrl_red_propellants_quadratic_peak",
+      "archivos_lrl_red_propellants_quadratic_peak_t_of_of",
+      "archivos_lrl_red_propellants_rationale_1",
+      "archivos_lrl_red_propellants_rationale_221",
+      "archivos_lrl_red_propellants_rationale_32",
+      "os",
+      "time",
+      "typing"
+    ],
+    "5": [
+      "archivos_lrl_red_get_pip",
+      "archivos_lrl_red_get_pip_bootstrap",
+      "archivos_lrl_red_get_pip_determine_pip_install_arguments",
+      "archivos_lrl_red_get_pip_include_setuptools",
+      "archivos_lrl_red_get_pip_include_wheel",
+      "archivos_lrl_red_get_pip_main",
+      "archivos_lrl_red_get_pip_monkeypatch_for_cert",
+      "archivos_lrl_red_get_pip_monkeypatch_for_cert_cert_parse_args",
+      "archivos_lrl_red_get_pip_rationale_47",
+      "archivos_lrl_red_get_pip_rationale_58",
+      "archivos_lrl_red_get_pip_rationale_86",
+      "argparse",
+      "base64",
+      "importlib",
+      "os_path",
+      "pkgutil",
+      "shutil",
+      "sys",
+      "tempfile"
+    ],
+    "6": [
+      "archivos_lrl_red_injector_model",
+      "archivos_lrl_red_injector_model_best_injector_type_for_propellant",
+      "archivos_lrl_red_injector_model_design_injectors",
+      "archivos_lrl_red_injector_model_injector_pressure_drop_penalty",
+      "archivos_lrl_red_injector_model_injectordesign",
+      "archivos_lrl_red_injector_model_injectortype",
+      "archivos_lrl_red_injector_model_rationale_1",
+      "archivos_lrl_red_injector_model_rationale_125",
+      "archivos_lrl_red_injector_model_rationale_230",
+      "archivos_lrl_red_injector_model_rationale_243",
+      "dataclasses"
+    ],
+    "7": [
+      "github_workflows_codeql_analyze_steps",
+      "github_workflows_codeql_steps_if",
+      "github_workflows_codeql_steps_name",
+      "github_workflows_codeql_steps_run",
+      "github_workflows_codeql_steps_shell",
+      "github_workflows_codeql_steps_uses",
+      "github_workflows_codeql_steps_with",
+      "github_workflows_codeql_with_build_mode",
+      "github_workflows_codeql_with_category",
+      "github_workflows_codeql_with_languages"
+    ]
+  },
+  "cohesion": {
+    "0": 0.12121212121212122,
+    "1": 0.08377896613190731,
+    "2": 0.08,
+    "3": 0.16304347826086957,
+    "4": 0.14210526315789473,
+    "5": 0.16374269005847952,
+    "6": 0.2,
+    "7": 0.2
+  },
+  "gods": [
+    {
+      "id": "archivos_lrl_red_propellants_propellantcombination",
+      "label": "PropellantCombination",
+      "degree": 25
+    },
+    {
+      "id": "archivos_lrl_red_optimizer_evaluate_design",
+      "label": "evaluate_design()",
+      "degree": 21
+    },
+    {
+      "id": "archivos_lrl_red_thermodynamics_compute_nozzle_state",
+      "label": "compute_nozzle_state()",
+      "degree": 15
+    },
+    {
+      "id": "archivos_lrl_red_cycle_selector_enginecycle",
+      "label": "EngineCycle",
+      "degree": 14
+    },
+    {
+      "id": "archivos_lrl_red_objective_function_objective_score",
+      "label": "objective_score()",
+      "degree": 14
+    },
+    {
+      "id": "archivos_lrl_red_objective_function_score_breakdown",
+      "label": "score_breakdown()",
+      "degree": 14
+    },
+    {
+      "id": "archivos_lrl_red_main_design_engine",
+      "label": "design_engine()",
+      "degree": 9
+    },
+    {
+      "id": "archivos_lrl_red_optimizer_optimise_for_cycle",
+      "label": "optimise_for_cycle()",
+      "degree": 8
+    },
+    {
+      "id": "archivos_lrl_red_optimizer_run_optimisation",
+      "label": "run_optimisation()",
+      "degree": 8
+    },
+    {
+      "id": "archivos_lrl_red_injector_model_design_injectors",
+      "label": "design_injectors()",
+      "degree": 7
+    }
+  ],
+  "surprises": [
+    {
+      "source": "hard_constraint_penalty()",
+      "target": "EngineCycle",
+      "source_files": [
+        "archivos/LRL/RED/objective_function.py",
+        "archivos/LRL/RED/cycle_selector.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "objective_score()",
+      "target": "EngineCycle",
+      "source_files": [
+        "archivos/LRL/RED/objective_function.py",
+        "archivos/LRL/RED/cycle_selector.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "score_breakdown()",
+      "target": "EngineCycle",
+      "source_files": [
+        "archivos/LRL/RED/objective_function.py",
+        "archivos/LRL/RED/cycle_selector.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "score_complexity()",
+      "target": "EngineCycle",
+      "source_files": [
+        "archivos/LRL/RED/objective_function.py",
+        "archivos/LRL/RED/cycle_selector.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    },
+    {
+      "source": "design_injectors()",
+      "target": "PropellantCombination",
+      "source_files": [
+        "archivos/LRL/RED/injector_model.py",
+        "archivos/LRL/RED/propellants.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source; bridges separate communities"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `PropellantCombination` connect `optimizer.py` to `thermodynamics.py`, `numpy`, `main.py`, `injector_model.py`?",
+      "why": "High betweenness centrality (0.110) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 13 inferred relationships involving `PropellantCombination` (e.g. with `get_all_feasible_cycles()` and `is_cycle_feasible()`) actually correct?",
+      "why": "`PropellantCombination` has 13 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `optimizer.py` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.12121212121212122 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `compute_nozzle_state()` connect `thermodynamics.py` to `optimizer.py`, `numpy`?",
+      "why": "High betweenness centrality (0.054) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 3 inferred relationships involving `evaluate_design()` (e.g. with `EngineCycle` and `PropellantCombination`) actually correct?",
+      "why": "`evaluate_design()` has 3 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `thermodynamics.py` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.08377896613190731 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `evaluate_design()` connect `optimizer.py` to `thermodynamics.py`, `numpy`, `injector_model.py`?",
+      "why": "High betweenness centrality (0.044) - this node is a cross-community bridge."
+    }
+  ]
+}
